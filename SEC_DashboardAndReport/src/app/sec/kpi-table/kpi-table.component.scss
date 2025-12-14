@@ -1,7 +1,6 @@
 .kpi-page-container {
   padding: 20px;
   max-width: 100%;
-  // width: 100%;
   margin: 0 auto;
 }
 
@@ -36,19 +35,6 @@
   border-radius: 8px;
   border: 1px solid #e9ecef;
   justify-content: space-between;
-
-}
-.filters-section-left {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: center;
-}
-.filters-section-right {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: center;
 }
 
 .filter-field {
@@ -91,11 +77,18 @@
   background: #1c5196;
   color: white;
   padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   
   h3 {
     margin: 0;
     font-size: 18px;
     font-weight: 500;
+  }
+
+  .download-button {
+    color: white;
   }
 }
 
@@ -128,128 +121,29 @@
     border-bottom: 1px solid #e9ecef;
     font-size: 12px;
     text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    vertical-align: middle;
+    
+    // Ensure content is visible
+    &:not(:has(.inline-edit-field)) {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
   
   .mat-mdc-row:hover {
     background: #f8f9fa;
   }
-  
-  // Column width definitions
-  .mat-column-kpi {
-    width: 10%;
-    text-align: left;
-  }
-  
-  .mat-column-department {
-    width: 10%;
-  }
-  
-  .mat-column-targetValue {
-    width: 7%;
-  }
-  
-  .mat-column-actualValue {
-    width: 7%;
-  }
-  
-  .mat-column-dataType {
-    width: 8%;
-  }
-  
-  .mat-column-deadlines {
-    width: 12%;
-    text-align: left;
-  }
-  
-  .mat-column-lastEdit {
-    width: 8%;
-  }
-  
-  .mat-column-modifiedBy {
-    width: 8%;
-  }
-  
-  .mat-column-status {
-    width: 7%;
-  }
-  
-  .mat-column-actions {
-    width: 5%;
-  
-  }
 }
 
-// KPI Name Styling
-.kpi-name {
-  text-align: left;
-  
-  strong {
-    display: block;
-    color: #1c5196;
-    font-size: 13px;
-    margin-bottom: 2px;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .kpi-description {
-    margin: 0;
-    color: #666;
-    font-size: 11px;
-    line-height: 1.3;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-// Data Type Badge
-.data-type-badge {
-  padding: 2px 6px;
+// Status badge for the new table
+.status-badge {
+  padding: 4px 12px;
   border-radius: 12px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  display: inline-block;
-  white-space: nowrap;
-  
-  &.type-0 {
-    background: #e3f2fd;
-    color: #1976d2;
-  }
-  
-  &.type-1 {
-    background: #f3e5f5;
-    color: #7b1fa2;
-  }
-  
-  &.type-2 {
-    background: #e8f5e8;
-    color: #2e7d32;
-  }
-  
-  &.type-3 {
-    background: #fff3e0;
-    color: #f57c00;
-  }
-  &.type-Approved {
-    background: #e8f5e8;
-    color: #2e7d32;
-  }
-  &.type-Pending {
-    background: #fff3e0;
-    color: #f57c00;
-  }
-  &.type-Rejected {
-    background: #fab0b0;
-    color: #a40f0f;
-  }
+  background: #e3f2fd;
+  color: #1976d2;
 }
 
 // No Data State
@@ -277,50 +171,142 @@
   }
 }
 
-// Inline editing styles
-.edit-container {
-  display: flex;
-  align-items: center;
-  min-width: 80px;
+// FIXED: Inline edit fields for the new table structure
+.inline-edit-field {
+  width: 100% !important;
+  min-width: 80px !important;
+  margin: 0 !important;
+  display: block !important;
+
+  // Override Material form field wrapper
+  ::ng-deep {
+    .mat-mdc-form-field-wrapper {
+      padding-bottom: 0 !important;
+      margin-bottom: 0 !important;
+      padding-top: 0 !important;
+      margin-top: 0 !important;
+    }
+
+    .mat-mdc-form-field-flex {
+      padding: 0 !important;
+      align-items: center !important;
+      height: 32px !important;
+    }
+
+    .mat-mdc-form-field-infix {
+      padding: 0 !important;
+      border-top: 0 !important;
+      min-height: 32px !important;
+      max-height: 32px !important;
+      height: 32px !important;
+      display: flex !important;
+      align-items: center !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      padding: 0 !important;
+      height: 32px !important;
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none !important;
+      height: 0 !important;
+    }
+
+    .mat-mdc-form-field-underline,
+    .mdc-line-ripple {
+      display: none !important;
+    }
+
+    .mat-mdc-form-field-hint-wrapper,
+    .mat-mdc-form-field-error-wrapper {
+      display: none !important;
+      height: 0 !important;
+    }
+
+    // Style the actual input
+    input {
+      width: 100% !important;
+      font-size: 12px !important;
+      padding: 6px 8px !important;
+      border: 1px solid #1c5196 !important;
+      border-radius: 4px !important;
+      background: white !important;
+      box-sizing: border-box !important;
+      height: 32px !important;
+      line-height: normal !important;
+      margin: 0 !important;
+      
+      &:focus {
+        outline: 2px solid #1c5196 !important;
+        outline-offset: 0 !important;
+        border-color: #1c5196 !important;
+      }
+
+      &::placeholder {
+        color: #999 !important;
+      }
+    }
+
+    // Datepicker toggle
+    .mat-datepicker-toggle {
+      position: absolute !important;
+      right: 2px !important;
+      top: 0 !important;
+      height: 32px !important;
+      transform: none !important;
+      display: flex !important;
+      align-items: center !important;
+      
+      button {
+        width: 28px !important;
+        height: 28px !important;
+        padding: 0 !important;
+        
+        .mat-mdc-button-touch-target {
+          width: 28px !important;
+          height: 28px !important;
+        }
+      }
+
+      svg {
+        width: 18px !important;
+        height: 18px !important;
+      }
+    }
+
+    // Datepicker input with toggle
+    .mat-datepicker-input {
+      padding-right: 32px !important;
+    }
+
+    // Material suffix container
+    .mat-mdc-form-field-icon-suffix {
+      height: 32px !important;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+  }
 }
 
-.edit-field {
-  // width: 70px;
-  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-  .mat-form-field-wrapper {
-    padding-bottom: 0;
-  }
-  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-  .mat-form-field-underline {
-    display: none;
-  }
-  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-  .mat-form-field-infix {
-    border: none;
-    border-radius: 0;
-    padding: 0;
-    font-size: 14px;
-    background: transparent;
-    box-shadow: none;
-  }
+// FIXED: Editing row highlight
+.editing-row {
+  background-color: #fff3e0 !important;
   
-  /* Make the input look like the text span */
-  input {
-    border: none;
-    background: transparent;
-    font-size: 14px;
-    font-weight: 400;
-    color: inherit;
-    text-align: left;
-    padding: 0;
-    margin: 0;
-    outline: none;
-    box-shadow: none;
+  &:hover {
+    background-color: #ffe0b2 !important;
+  }
+
+  .mat-mdc-cell {
+    border-bottom-color: #ffb74d !important;
     
-    &:focus {
-      border: none;
-      box-shadow: none;
-      outline: none;
+    // Ensure inline edit fields are visible in editing mode
+    .inline-edit-field {
+      visibility: visible !important;
+      opacity: 1 !important;
     }
   }
 }
@@ -336,118 +322,56 @@
   gap: 0;
 }
 
-// Deadline Column Styling
-.deadline-info {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 85px;
-  text-align: left;
-}
-
-.deadline-item {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  padding: 2px 4px;
-  background: #f8f9fa;
-  border-radius: 3px;
-  border-left: 2px solid #1c5196;
-  font-size: 10px;
-  
-  .deadline-icon {
-    font-size: 12px;
-    width: 12px;
-    height: 12px;
-    color: #1c5196;
-    flex-shrink: 0;
+.mat-mdc-row {
+  &.row-approved {
+    background-color: #ffffff !important;
+    
+    &:hover {
+      background-color: #f8f9fa !important;
+    }
+    
+    .mat-mdc-cell {
+      border-bottom-color: #e9ecef;
+      color: inherit;
+    }
   }
   
-  .deadline-label {
-    font-size: 9px;
-    font-weight: 500;
-    color: #666;
-    min-width: 35px;
-    flex-shrink: 0;
-  }
-  
-  .deadline-date {
-    font-size: 9px;
-    color: #333;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  &:not(.row-approved):hover {
+    background: #f8f9fa;
   }
 }
 
-.deadline-overdue {
-  background: #ffebee;
-  border-left-color: #d32f2f;
-  
-  .deadline-icon {
-    color: #d32f2f;
+// Snackbar styles for notifications
+::ng-deep {
+  .snackbar-success {
+    background-color: #4caf50 !important;
+    color: white !important;
+    
+    .mat-mdc-snack-bar-label {
+      color: white !important;
+    }
   }
-  .deadline-date {
-    color: #b71c1c;
-    font-weight: 600;
-  }
-}
 
-.no-deadlines {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
-  color: #999;
-  font-style: italic;
-  font-size: 9px;
-  text-align: center;
+  .snackbar-error {
+    background-color: #f44336 !important;
+    color: white !important;
+    
+    .mat-mdc-snack-bar-label {
+      color: white !important;
+    }
+  }
+
+  .snackbar-info {
+    background-color: #2196f3 !important;
+    color: white !important;
+    
+    .mat-mdc-snack-bar-label {
+      color: white !important;
+    }
+  }
 }
 
 // Responsive Design
-@media (max-width: 1200px) {
-  .kpi-table {
-    .mat-mdc-header-cell,
-    .mat-mdc-cell {
-      padding: 8px 4px;
-      font-size: 11px;
-    }
-    
-    .mat-column-kpi { width: 18%; }
-    .mat-column-department { width: 10%; }
-    .mat-column-targetValue { width: 9%; }
-    .mat-column-actualValue { width: 9%; }
-    .mat-column-dataType { width: 7%; }
-    .mat-column-deadlines { width: 15%; }
-    .mat-column-lastEdit { width: 9%; }
-    .mat-column-modifiedBy { width: 7%; }
-    .mat-column-status { width: 6%; }
-    .mat-column-actions { width: 9%; }
-  }
-}
-
-@media (max-width: 992px) {
-  .kpi-table {
-    .mat-mdc-header-cell,
-    .mat-mdc-cell {
-      padding: 6px 3px;
-      font-size: 10px;
-    }
-    
-    .mat-column-kpi { width: 16%; }
-    .mat-column-department { width: 9%; }
-    .mat-column-targetValue { width: 8%; }
-    .mat-column-actualValue { width: 8%; }
-    .mat-column-dataType { width: 6%; }
-    .mat-column-deadlines { width: 16%; }
-    .mat-column-lastEdit { width: 8%; }
-    .mat-column-modifiedBy { width: 6%; }
-    .mat-column-status { width: 5%; }
-    .mat-column-actions { width: 8%; }
-  }
-}
-
 @media (max-width: 768px) {
   .filters-section {
     flex-direction: column;
@@ -467,19 +391,8 @@
     .mat-mdc-header-cell,
     .mat-mdc-cell {
       padding: 4px 2px;
-      font-size: 9px;
+      font-size: 10px;
     }
-    
-    .mat-column-kpi { width: 15%; }
-    .mat-column-department { width: 8%; }
-    .mat-column-targetValue { width: 7%; }
-    .mat-column-actualValue { width: 7%; }
-    .mat-column-dataType { width: 5%; }
-    .mat-column-deadlines { width: 18%; }
-    .mat-column-lastEdit { width: 7%; }
-    .mat-column-modifiedBy { width: 5%; }
-    .mat-column-status { width: 4%; }
-    .mat-column-actions { width: 7%; }
   }
 }
 
@@ -493,112 +406,7 @@
     .mat-mdc-header-cell,
     .mat-mdc-cell {
       padding: 3px 1px;
-      font-size: 8px;
+      font-size: 9px;
     }
-    
-    .mat-column-kpi { width: 14%; }
-    .mat-column-department { width: 7%; }
-    .mat-column-targetValue { width: 6%; }
-    .mat-column-actualValue { width: 6%; }
-    .mat-column-dataType { width: 4%; }
-    .mat-column-deadlines { width: 20%; }
-    .mat-column-lastEdit { width: 6%; }
-    .mat-column-modifiedBy { width: 4%; }
-    .mat-column-status { width: 3%; }
-    .mat-column-actions { width: 6%; }
-  }
-}
-
-.deadline-item {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  padding: 2px 4px;
-  background: #f8f9fa;
-  border-radius: 3px;
-  border-left: 2px solid #1c5196;
-  font-size: 10px;
-  
-  .deadline-icon {
-    font-size: 12px;
-    width: 12px;
-    height: 12px;
-    color: #1c5196;
-    flex-shrink: 0;
-  }
-  
-  .deadline-label {
-    font-size: 9px;
-    font-weight: 500;
-    color: #666;
-    min-width: 35px;
-    flex-shrink: 0;
-  }
-  
-  .deadline-date {
-    font-size: 9px;
-    color: #333;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-.deadline-overdue {
-  background: #ffebee;
-  border-left-color: #d32f2f;
-  
-  .deadline-icon {
-    color: #d32f2f;
-  }
-  .deadline-date {
-    color: #b71c1c;
-    font-weight: 600;
-  }
-}
-
-// New: Completed deadline state (for approved KPIs specifically)
-.deadline-completed {
-  background: #e8f5e9;
-  border-left-color: #4caf50;
-  
-  .deadline-icon {
-    color: #4caf50;
-  }
-  
-  .deadline-label {
-    color: #2e7d32;
-  }
-  
-  .deadline-date {
-    color: #2e7d32;
-    text-decoration: line-through;
-  }
-}
-
-.mat-mdc-row {
-  &.row-approved {
-    background-color: #ffffff !important; // White background
-    
-    &:hover {
-      background-color: #f8f9fa !important; // Standard light gray hover (same as normal rows)
-    }
-    
-    .mat-mdc-cell {
-      border-bottom-color: #e9ecef; // Standard border color
-      color: inherit; // Use default text color
-    }
-    
-    // Keep the deadline badges with their green styling
-    .deadline-completed {
-      background: #e8f5e9;
-      border-left-color: #4caf50;
-    }
-  }
-  
-   // Keep normal hover for non-approved rows
-  &:not(.row-approved):hover {
-    background: #f8f9fa;
   }
 }

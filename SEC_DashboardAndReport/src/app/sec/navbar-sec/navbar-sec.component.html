@@ -8,9 +8,26 @@
 
     <div class="nav-links"
       [ngClass]="{ 'mobile-menu-open': isMobileMenuOpen, 'slide-in': isMobileMenuOpen, 'slide-out': !isMobileMenuOpen && wasMobileMenuOpen }">
-      <!-- <a mat-button routerLink="/home" routerLinkActive="active-link" class="link" (click)="closeMenu()">Overview</a> -->
-      <!-- <a mat-button routerLink="/kpi" routerLinkActive="active-link" class="link" (click)="closeMenu()">KPIs</a> -->
+      
+      <!-- KPI Menu -->
+      <a mat-button [matMenuTriggerFor]="kpiMenu" class="link" [ngClass]="{'active-link': isKpiActive}">
+        KPIs
+      </a>
+      <mat-menu #kpiMenu="matMenu">
+        <button mat-menu-item routerLink="/kpi/bcp" routerLinkActive="active-link" (click)="closeMenu()">
+          BCPs Review & Update
+        </button>
+        <button mat-menu-item routerLink="/kpi/dnt" routerLinkActive="active-link" (click)="closeMenu()">
+          Drills & Tests Conducted
+        </button>
+        <button mat-menu-item routerLink="/kpi/erc" routerLinkActive="active-link" (click)="closeMenu()">
+          External Requirements Closure
+        </button>
+      </mat-menu>
 
+      <!-- Other navigation links can be uncommented as needed -->
+      <!-- <a mat-button routerLink="/home" routerLinkActive="active-link" class="link" (click)="closeMenu()">Overview</a> -->
+      
       <!-- Reports Link with Conditional Active Class -->
       <!-- <a mat-button [matMenuTriggerFor]="reportsMenu" class="link" [ngClass]="{'active-link': isReportsActive}">
         Reports

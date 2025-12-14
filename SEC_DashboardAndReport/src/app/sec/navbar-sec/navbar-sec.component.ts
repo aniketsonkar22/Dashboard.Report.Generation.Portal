@@ -16,9 +16,9 @@ export class NavbarSecComponent implements OnInit {
   userId!: string;
   userRole!: AppRole;
   isReportsActive = false;
+  isKpiActive = false; // Track if any KPI route is active
   isMobileMenuOpen = false;
   wasMobileMenuOpen = false;
-  //roleId = 1; // Replace with the role ID dynamically retrieved from Azure AD in the future
 
   notifications: Notification[] = [];
 
@@ -32,6 +32,8 @@ export class NavbarSecComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         // Check if the current URL contains '/reports'
         this.isReportsActive = event.url.includes('/reports');
+        // Check if the current URL contains '/kpi'
+        this.isKpiActive = event.url.includes('/kpi');
       }
     });
   }
@@ -43,7 +45,6 @@ export class NavbarSecComponent implements OnInit {
     this.userName = userInfo.data.data.name;
     console.log('USER INFO', this.userId, this.userRole, this.userName);
     this.loadNotifications();
-
 
     // Ensure SignalR is started and subscribe to mapped notifications
     this.notificationService.start();
@@ -64,6 +65,7 @@ export class NavbarSecComponent implements OnInit {
     this.wasMobileMenuOpen = this.isMobileMenuOpen;
     this.isMobileMenuOpen = false;
   }
+
   logout() {
     this.authService.logout();
   }
@@ -118,6 +120,7 @@ export class NavbarSecComponent implements OnInit {
       }
     );
   }
+
   getIconForType(type: string | undefined): string {
     switch (type) {
       case 'AssignKpiToDepartment':

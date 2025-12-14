@@ -1,0 +1,58 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.dynamic-table {
+  width: 100%;
+
+  .mat-mdc-header-cell {
+    font-weight: 600;
+    color: #333;
+    background: #f8f9fa;
+  }
+
+  .mat-mdc-cell {
+    padding: 16px 24px;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .mat-mdc-row:hover {
+    background: #f8f9fa;
+  }
+
+  .actions-header {
+    text-align: right;
+    width: 1%;
+    white-space: nowrap;
+  }
+
+  .actions-cell {
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+
+.kpi-card {
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-header {
+  background: #1c5196;
+  color: white;
+  padding: 16px 24px;
+
+  .mat-mdc-card-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+.table-content {
+  padding: 0;
+}
+
+

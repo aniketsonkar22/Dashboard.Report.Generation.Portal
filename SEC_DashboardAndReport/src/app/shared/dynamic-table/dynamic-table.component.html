@@ -1,0 +1,39 @@
+<mat-card class="kpi-card">
+  <mat-card-header class="table-header">
+    <mat-card-title>{{ tableTitle || 'Data' }}</mat-card-title>
+    <span class="spacer"></span>
+    <button *ngIf="showDownload" mat-stroked-button color="primary" (click)="triggerDownload()">
+      <mat-icon>download</mat-icon>
+      Download
+    </button>
+  </mat-card-header>
+  <mat-card-content class="table-content">
+    <table mat-table [dataSource]="dataSource" [matSort]="enableSorting" (matSortChange)="onSortChange($event)" class="kpi-table dynamic-table">
+      <ng-container *ngFor="let col of columns" [matColumnDef]="col.key">
+        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="col.sortable ? col.key : null" [style.width]="col.width" [ngClass]="col.headerClass">
+          {{ col.header }}
+        </th>
+        <td mat-cell *matCellDef="let row" [ngClass]="col.cellClass">
+          {{ getCellValue(row, col) }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="__actions" *ngIf="actions?.length">
+        <th mat-header-cell *matHeaderCellDef class="actions-header">Actions</th>
+        <td mat-cell *matCellDef="let row" class="actions-cell">
+          <button *ngFor="let a of actions" mat-icon-button [color]="a.color" [disabled]="a.disabled ? a.disabled(row) : false" (click)="onActionClick(a.id, row)" [matTooltip]="a.label" [style.marginRight.px]="6" [style.marginLeft.px]="0" [style.padding.px]="0" [style.height.px]="36" [style.width.px]="36" [style.lineHeight.px]="36" [style.minWidth.px]="36" [style.minHeight.px]="36" [style.borderRadius.px]="18" *ngIf="a.show ? a.show(row) : true">
+            <mat-icon *ngIf="a.icon">{{ a.icon }}</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnKeys"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnKeys"></tr>
+    </table>
+
+    <mat-paginator *ngIf="enablePagination" [length]="totalCount ?? data?.length ?? 0" [pageIndex]="pageIndex" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)" showFirstLastButtons>
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>
+
+

@@ -1,0 +1,203 @@
+<div class="kpi-page-container">
+  <h2 class="page-title">KPI Management</h2>
+  <p class="page-description">View and manage Key Performance Indicators with advanced filtering and editing capabilities</p>
+
+  <!--Filters Section -->
+  <div class="filters-section">
+    <!-- KPI Type Filter (Primary) -->
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>KPI Type</mat-label>
+      <mat-select [(value)]="selectedKpiTypeId" (selectionChange)="onKpiTypeChange()">
+        <mat-option *ngFor="let config of kpiTypeConfigs" [value]="config.id">{{ config.label }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading KPIs...</p>
+  </div>
+
+  <!-- KPI Table -->
+  <div *ngIf="!loading" class="kpi-table-container">
+    <mat-card appearance="outlined" class="kpi-card">
+      <div class="table-header">
+        <h3>{{ selectedKpiLabel }} KPIs ({{ dataSource.data.length }} total)</h3>
+        <button mat-icon-button class="download-button" (click)="downloadReports()">
+          <mat-icon>download</mat-icon>
+        </button>
+      </div>
+
+      <div class="table-content" *ngIf="dataSource.data.length > 0">
+        <table mat-table [dataSource]="dataSource" class="kpi-table">
+          
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.date | date:'short' }}
+            </td>
+          </ng-container>
+
+          <!-- Sector Column -->
+          <ng-container matColumnDef="sector">
+            <th mat-header-cell *matHeaderCellDef>Sector</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.sector }}</span>
+            </td>
+          </ng-container>
+
+          <!-- BCP Columns -->
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.type }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="bLs">
+            <th mat-header-cell *matHeaderCellDef>BLs</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.bLs }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="bcPs_Reviewed">
+            <th mat-header-cell *matHeaderCellDef>BCPs Reviewed</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.bcPs_Reviewed }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="total_BCPs">
+            <th mat-header-cell *matHeaderCellDef>Total BCPs</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.total_BCPs }}</span>
+            </td>
+          </ng-container>
+
+          <!-- DnT Columns -->
+          <ng-container matColumnDef="drillType">
+            <th mat-header-cell *matHeaderCellDef>Drill Type</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.drillType }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="drillConducted">
+            <th mat-header-cell *matHeaderCellDef>Drill Conducted</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.drillConducted }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="plannedDrills">
+            <th mat-header-cell *matHeaderCellDef>Planned Drills</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.plannedDrills }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="correctiveActions">
+            <th mat-header-cell *matHeaderCellDef>Corrective Actions</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.correctiveActions }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="correctiveType">
+            <th mat-header-cell *matHeaderCellDef>Corrective Type</th>
+            <td mat-cell *matCellDef="let element">
+              <span class="status-badge">{{ element.correctiveType }}</span>
+            </td>
+          </ng-container>
+
+          <!-- ERC Columns -->
+          <ng-container matColumnDef="ext_Requirement_Type">
+            <th mat-header-cell *matHeaderCellDef>Requirement Type</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.ext_Requirement_Type }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="total_Requirement">
+            <th mat-header-cell *matHeaderCellDef>Total Requirements</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.total_Requirement }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ext_Requirements">
+            <th mat-header-cell *matHeaderCellDef>External Requirements</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.ext_Requirements }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Common Columns -->
+          <ng-container matColumnDef="createdBy">
+            <th mat-header-cell *matHeaderCellDef>Created By</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.createdBy || 'N/A' }}
+            </td>
+          </ng-container>
+
+          <!-- Actions Column (optional) -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="action-buttons compact">
+                <button mat-icon-button [matMenuTriggerFor]="actionsMenu" matTooltip="Actions">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #actionsMenu="matMenu">
+                  <button mat-menu-item (click)="startEdit(element)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit</span>
+                  </button>
+                  <button mat-menu-item (click)="addComment(element)">
+                    <mat-icon>comment</mat-icon>
+                    <span>Add Comment</span>
+                  </button>
+                  <button mat-menu-item (click)="approveKpi(element)" [disabled]="userRole !== 'departmentManager'">
+                    <mat-icon>check_circle</mat-icon>
+                    <span>Approve</span>
+                  </button>
+                  <button mat-menu-item (click)="rejectKpi(element)" [disabled]="userRole !== 'departmentManager'">
+                    <mat-icon>cancel</mat-icon>
+                    <span>Reject</span>
+                  </button>
+                  <button mat-menu-item (click)="viewHistory(element)">
+                    <mat-icon>history</mat-icon>
+                    <span>History</span>
+                  </button>
+                </mat-menu>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+      <!-- No Data State -->
+      <div *ngIf="dataSource.data.length === 0 && !loading" class="no-data">
+        <mat-icon class="no-data-icon">assessment</mat-icon>
+        <h3>No KPIs Found</h3>
+        <p>Please select a KPI type to view data.</p>
+      </div>
+
+      <!-- Pagination -->
+      <mat-paginator
+        *ngIf="dataSource.data.length > 0"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [length]="totalCount"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </mat-card>
+  </div>
+</div>

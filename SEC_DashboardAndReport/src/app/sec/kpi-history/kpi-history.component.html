@@ -1,0 +1,191 @@
+<div class="kpi-history-container">
+    <!-- Header -->
+    <div class="history-header">
+        <div class="header-content">
+            <button mat-icon-button (click)="goBack()" class="back-button">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <div class="header-info">
+                <h1>KPI History</h1>
+                <div class="kpi-info" *ngIf="kpiName && departmentName">
+                    <span class="kpi-name">{{ kpiName }}</span>
+                    <span class="department-name">{{ departmentName }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-section">
+        <div class="filters-section-left">
+            <mat-card appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>Filters</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="filters-row">
+                        <mat-form-field appearance="outline" class="filter-field">
+                            <mat-label>Dashboard</mat-label>
+                            <mat-select [(value)]="departmentFilter" (selectionChange)="onFilterChange()">
+                                <mat-option value="">All Dashboards</mat-option>
+                                <mat-option *ngFor="let dept of departmentOptions" [value]="dept.id">
+                                    {{ dept.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="filter-field">
+                            <mat-label>KPI</mat-label>
+                            <mat-select [(value)]="kpiFilter" (selectionChange)="onFilterChange()">
+                                <mat-option value="">All KPIs</mat-option>
+                                <mat-option *ngFor="let kpi of kpiOptions" [value]="kpi.id">
+                                    {{ kpi.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <!-- 
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Status</mat-label>
+            <mat-select [(value)]="statusFilter">
+              <mat-option value="">All Statuses</mat-option>
+              <mat-option value="pending">Pending</mat-option>
+              <mat-option value="approved">Approved</mat-option>
+              <mat-option value="rejected">Rejected</mat-option>
+            </mat-select>
+          </mat-form-field> -->
+
+                        <mat-form-field appearance="outline" class="filter-field">
+                            <mat-label>From Date</mat-label>
+                            <input matInput [matDatepicker]="fromPicker" [(ngModel)]="dateFromFilter">
+                            <mat-datepicker-toggle matIconSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #fromPicker></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="filter-field">
+                            <mat-label>To Date</mat-label>
+                            <input matInput [matDatepicker]="toPicker" [(ngModel)]="dateToFilter">
+                            <mat-datepicker-toggle matIconSuffix [for]="toPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #toPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="filters-section-right">
+                        <div class="filter-actions">
+                            <button mat-raised-button color="primary" (click)="applyFilters()">
+                                <mat-icon>search</mat-icon>
+                                Apply Filters
+                            </button>
+                            <button mat-button (click)="clearFilters()">
+                                <mat-icon>replay</mat-icon>
+                                Reset
+                            </button>
+                            <button mat-button (click)="resetFiltersToAll(); applyFilters()">
+                                <mat-icon>view_list</mat-icon>
+                                Show All
+                            </button>
+                        
+                          
+                        </div>
+
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+      </div>
+
+        <!-- History Table -->
+        <div class="history-content">
+            <mat-card appearance="outlined" class="kpi-card">
+                <mat-card-header class="table-header">
+                    <mat-card-title>History Records</mat-card-title>
+                    <mat-card-subtitle *ngIf="totalCount > 0">
+                        Total: {{ totalCount }} records
+                    </mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content class="table-content">
+                    <!-- Loading State -->
+                    <div *ngIf="loading" class="loading-container">
+                        <mat-spinner diameter="40"></mat-spinner>
+                        <p>Loading history...</p>
+                    </div>
+
+                    <!-- Error State -->
+                    <div *ngIf="error && !loading" class="error-container">
+                        <mat-icon color="warn">error</mat-icon>
+                        <p>{{ error }}</p>
+                        <button mat-raised-button color="primary" (click)="loadHistory()">
+                            Retry
+                        </button>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div *ngIf="!loading && !error && historyItems.length === 0" class="empty-container">
+                        <mat-icon>history</mat-icon>
+                        <p>No history records found</p>
+                    </div>
+
+                    <!-- History Table -->
+                    <div *ngIf="!loading && !error && historyItems.length > 0" class="table-container">
+                        <table mat-table [dataSource]="dataSource" matSort class="history-table kpi-table">
+                            <!-- Date Column -->
+                            <ng-container matColumnDef="modifiedAt">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="modifiedAt">Date</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <div class="date-cell">
+                                        <div class="date">{{ formatDate(item.modifiedAt) }}</div>
+                                        <div class="time">{{ formatDateTime(item.modifiedAt) }}</div>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <!-- Modified By Column -->
+                            <ng-container matColumnDef="modifiedBy">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="modifiedBy">Modified By</th>
+                                <td mat-cell *matCellDef="let item">{{ item.modifiedBy }}</td>
+                            </ng-container>
+
+                            <!-- KPI Name Column -->
+                            <ng-container matColumnDef="kpiName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="kpiName">KPI</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="kpi-name">{{ item.kpiName }}</span>
+                                </td>
+                            </ng-container>
+                            <!-- Department Name Column -->
+                            <ng-container matColumnDef="departmentName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="departmentName">Dashboard</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="kpi-name">{{ getDepartmentName(item.departmentId) }}</span>
+                                </td>
+                            </ng-container>
+
+                            <!-- Old Actual Value Column -->
+                            <ng-container matColumnDef="oldActualValue">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="oldActualValue">Actual Value</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="value">{{ item.oldActualValue }}</span>
+                                </td>
+                            </ng-container>
+
+                            <!-- Old Target Value Column -->
+                            <ng-container matColumnDef="oldTargetValue">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="oldTargetValue">Target Value</th>
+                                <td mat-cell *matCellDef="let item">
+                                    <span class="value">{{ item.oldTargetValue }}</span>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+
+                        <!-- Pagination -->
+                        <mat-paginator [length]="totalCount" [pageSize]="pageSize"
+                            [pageIndex]="pageNumber - 1" [pageSizeOptions]="[5, 10, 25, 50]"
+                            (page)="onPageChange($event)" showFirstLastButtons>
+                        </mat-paginator>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>

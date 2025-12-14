@@ -1,0 +1,109 @@
+.report-card {
+  max-width: 260px;
+  // max-width: 100%;
+  width: 20rem;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  min-height: 17rem;
+}
+
+.icon-and-title {
+  display: flex;
+  align-items: center; /* Align icon and text vertically */
+  color: #1c5196;
+}
+
+.card-icon {
+  // font-size: 36px; /* Adjust icon size */
+  color: #1c5196; /* Darker color for the icon */
+  margin-right: 8px; /* Space between icon and text */
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.card-content {
+  margin: 16px 0;
+  font-size: 14px;
+  color: #6b6b6b;
+}
+
+.status-chips {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version.*/
+mat-chip {
+  font-size: 12px;
+  height: 24px;
+}
+
+.download-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  // color: #007bff; /* Adjust to your primary color */
+  cursor: pointer;
+}
+
+.status-pending {
+  // background-color: #f9c74f;
+  background-color: #ef7720;
+  color: #fff;
+}
+
+.status-review {
+  background-color: #1c5196;
+  color: #fff;
+}
+
+.status-approved {
+  background-color: #2e7d32;
+  color: #fff;
+}
+
+.status-error {
+  background-color: #d32f2f;
+  color: #fff;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+mat-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+mat-card:hover {
+  transform: translateY(-2px); /* Subtle hover effect */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+}
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+::ng-deep .mat-card-header-text {
+  /* CSS styles go here */
+  margin: 0px !important; // for example to remove the margin
+}
+
+.chipClass {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  align-items: flex-start;
+  .category {
+    margin-left: 0.3rem;
+    margin-bottom: 0.2rem;
+  }
+}

@@ -1,0 +1,17 @@
+.canvas {
+  // height: 92vh;
+  // background: url("../assets/Rectangle\ 7614.png");
+  // background-size: cover;
+  height: 100vh;
+}
+.pad{
+  padding-left:3rem;padding-right:3rem;
+}
+
+@media (max-width: 768px) {
+  .pad{
+    padding-left:0.5rem;padding-right:0.5rem;
+  }
+}
+
+

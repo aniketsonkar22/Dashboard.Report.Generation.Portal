@@ -1,0 +1,133 @@
+::ng-deep .mat-mdc-menu-panel{
+  min-width: 100% !important;
+  max-width: 100% !important;
+}
+
+.navbar {
+  background-color: white;
+  color: #1c5196;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 3rem;
+
+  .navbar-left {
+    display: flex;
+    align-items: center;
+
+    .burger-menu {
+      display: none;
+      margin-right: 16px;
+    }
+
+    .logo {
+      height: 40px;
+      margin-right: 16px;
+    }
+
+    .link {
+      color: #1c5196;
+      font-weight: 300;
+      text-transform: none;
+    }
+
+    .active-link {
+      font-weight: 500;
+    }
+  }
+
+  .navbar-right {
+    display: flex;
+    align-items: center;
+
+    .notification-button {
+      position: relative;
+      margin-right: 16px;
+    }
+
+    .welcome-message {
+      font-size: 16px;
+      font-weight: 500;
+      margin-right: 16px;
+    }
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+
+  /* Mobile responsive styling */
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+
+    .burger-menu {
+      display: inline-flex !important;
+    }
+
+    .logo {
+      margin-right: 8px;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    .mobile-menu-open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 64px;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      padding: 1rem;
+      z-index: 9;
+      animation: slide-in 0.3s forwards;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Elevation */
+
+      a {
+        padding: 8px 16px;
+        text-align: left;
+        width: 100%;
+      }
+    }
+
+    .slide-out {
+      animation: slide-out 0.3s forwards;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .welcome-message {
+      display: none;
+    }
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+}
+.logout-button {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}

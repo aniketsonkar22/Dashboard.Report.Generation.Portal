@@ -1,0 +1,73 @@
+<div class="header">
+  <h2>Dashboards</h2>
+  <button mat-flat-button color="primary" (click)="addDepartment()" [disabled]="userRole !== 'Admin'"
+    [class.faded]="userRole !== 'Admin'"
+    [matTooltip]="userRole !== 'Admin' ? 'Only admins can add dashboards' : ''">
+    <mat-icon>add</mat-icon>
+    Add Dashboard
+  </button>
+  </div>
+
+<div *ngIf="loading" class="loading-container">
+  <mat-spinner></mat-spinner>
+  <p>Loading dashboards...</p>
+</div>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="isActive">
+    <th mat-header-cell *matHeaderCellDef> Active </th>
+    <td mat-cell *matCellDef="let element"> {{element.isActive ? 'Yes' : 'No'}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="createdAt">
+    <th mat-header-cell *matHeaderCellDef> Created At </th>
+    <td mat-cell *matCellDef="let element"> {{element.createdAt | date:'medium'}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="createdBy">
+    <th mat-header-cell *matHeaderCellDef> Created By </th>
+    <td mat-cell *matCellDef="let element"> {{element.createdBy || '-'}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> </th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button (click)="editDepartment(element)" matTooltip="Edit Department">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button (click)="assignKpi(element)" matTooltip="Assign KPI">
+        <mat-icon>add_chart</mat-icon>
+      </button>
+      <button mat-icon-button (click)="viewUsers(element)" matTooltip="View Users">
+        <mat-icon>group</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteDepartment(element.id)" matTooltip="Delete Department">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>
+
+<div *ngIf="!loading && dataSource.data.length === 0" class="no-data">
+  <mat-icon class="no-data-icon">apartment</mat-icon>
+  <h3>No Dashboards Found</h3>
+  <p>No dashboards are available at the moment.</p>
+</div>
+
+<mat-paginator
+  [length]="totalCount"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex"
+  [pageSizeOptions]="pageSizeOptions"
+  (page)="onPageChange($event)"
+  showFirstLastButtons>
+</mat-paginator>

@@ -1,0 +1,1549 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "Oneview APIs",
+      "version": "v1"
+    },
+    "paths": {
+      "/api/v1/audits": {
+        "get": {
+          "tags": [
+            "Audits"
+          ],
+          "summary": "Fetch all the audit logs",
+          "operationId": "GetAllAuditLogs",
+          "parameters": [
+            {
+              "name": "pageNumber",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 1
+              }
+            },
+            {
+              "name": "pageSize",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 10
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/auth/login": {
+        "get": {
+          "tags": [
+            "Auth"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/auth/code": {
+        "get": {
+          "tags": [
+            "Auth"
+          ],
+          "parameters": [
+            {
+              "name": "code",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/auth/dev/token": {
+        "post": {
+          "tags": [
+            "Auth"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/auth/token": {
+        "get": {
+          "tags": [
+            "Auth"
+          ],
+          "parameters": [
+            {
+              "name": "email",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/auth/user": {
+        "get": {
+          "tags": [
+            "Auth"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/auth/simulate-login": {
+        "get": {
+          "tags": [
+            "Auth"
+          ],
+          "parameters": [
+            {
+              "name": "email",
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/auth/logout": {
+        "get": {
+          "tags": [
+            "Auth"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/departments/{departmentId}/kpis": {
+        "get": {
+          "tags": [
+            "DepartmentKpis"
+          ],
+          "summary": "Fetch all the KPIs assigned to the department.",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "pageNumber",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 1
+              }
+            },
+            {
+              "name": "pageSize",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 10
+              }
+            },
+            {
+              "name": "status",
+              "in": "query",
+              "schema": {
+                "$ref": "#/components/schemas/Status"
+              }
+            },
+            {
+              "name": "dataType",
+              "in": "query",
+              "schema": {
+                "$ref": "#/components/schemas/KpiType"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/departments/{departmentId}/kpi/{kpiId}/assign": {
+        "put": {
+          "tags": [
+            "DepartmentKpis"
+          ],
+          "summary": "Assign KPI to the Department.",
+          "operationId": "AssignKPIToDepartment",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "kpiId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignKpiRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignKpiRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignKpiRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignKpiRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/departments/{departmentId}/kpi/{kpiId}/deadline": {
+        "patch": {
+          "tags": [
+            "DepartmentKpis"
+          ],
+          "summary": "Assign Deadline to KPI.",
+          "operationId": "AssignKPIDeadline",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "kpiId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignKpiDeadlineRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignKpiDeadlineRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignKpiDeadlineRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignKpiDeadlineRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/departments/{departmentId}/kpi/{kpiId}/comment": {
+        "get": {
+          "tags": [
+            "DepartmentKpis"
+          ],
+          "summary": "Fetch comments for Department's KPI.",
+          "operationId": "GetKpiComments",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "kpiId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "pageNumber",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 1
+              }
+            },
+            {
+              "name": "pageSize",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 10
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "DepartmentKpis"
+          ],
+          "summary": "Add comment to KPI associated with a department.",
+          "operationId": "AddCommentToKpi",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "kpiId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddCommentRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddCommentRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddCommentRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddCommentRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/departments/{departmentId}/kpi/{kpiId}/history": {
+        "get": {
+          "tags": [
+            "DepartmentKpis"
+          ],
+          "summary": "Fetch historical data for Department's KPI.",
+          "operationId": "GetDepartmentKpiHistory",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "kpiId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "pageNumber",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 1
+              }
+            },
+            {
+              "name": "pageSize",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 10
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/departments/{departmentId}/kpi/{kpiId}/approve": {
+        "patch": {
+          "tags": [
+            "DepartmentKpis"
+          ],
+          "summary": "Approve KPI Status.",
+          "operationId": "ApproveKpiStatus",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "kpiId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/departments/{departmentId}/kpi/{kpiId}/reject": {
+        "patch": {
+          "tags": [
+            "DepartmentKpis"
+          ],
+          "summary": "Reject KPI Status",
+          "operationId": "RejectKpiStatus",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "kpiId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/departments/{departmentId}/kpi/{kpiId}/value": {
+        "patch": {
+          "tags": [
+            "DepartmentKpis"
+          ],
+          "summary": "Update KPI value.",
+          "operationId": "EditKpiValue",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "kpiId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepartmentKpiEditRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepartmentKpiEditRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepartmentKpiEditRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DepartmentKpiEditRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/departments/{departmentId}/kpi/{kpiId}": {
+        "delete": {
+          "tags": [
+            "DepartmentKpis"
+          ],
+          "summary": "Remove KPI from Department.",
+          "operationId": "RemoveKpiFromDepartment",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "kpiId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/departments": {
+        "post": {
+          "tags": [
+            "Departments"
+          ],
+          "summary": "Create new department.",
+          "operationId": "CreateDepartment",
+          "requestBody": {
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateDepartmentRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateDepartmentRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateDepartmentRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateDepartmentRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "get": {
+          "tags": [
+            "Departments"
+          ],
+          "summary": "Get all departments.",
+          "operationId": "GetAllDepartments",
+          "parameters": [
+            {
+              "name": "pageNumber",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 1
+              }
+            },
+            {
+              "name": "pageSize",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 10
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/departments/{departmentId}": {
+        "get": {
+          "tags": [
+            "Departments"
+          ],
+          "summary": "Get specified department via departmentId.",
+          "operationId": "GetDepartmentById",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "patch": {
+          "tags": [
+            "Departments"
+          ],
+          "summary": "Update department.",
+          "operationId": "UpdateDepartment",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateDepartmentRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateDepartmentRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateDepartmentRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateDepartmentRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Departments"
+          ],
+          "summary": "Delete specified department via departmentId.",
+          "operationId": "DeleteDepartmentById",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/departments/{departmentId}/users": {
+        "get": {
+          "tags": [
+            "Departments"
+          ],
+          "summary": "Retrives all the users associated with the specified department.",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/kpi": {
+        "post": {
+          "tags": [
+            "Kpi"
+          ],
+          "summary": "Create a new KPI.",
+          "operationId": "CreateKpi",
+          "requestBody": {
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateKpiRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateKpiRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateKpiRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateKpiRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "get": {
+          "tags": [
+            "Kpi"
+          ],
+          "summary": "Fetch all the KPIs.",
+          "operationId": "GetAllKpis",
+          "parameters": [
+            {
+              "name": "pageNumber",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 1
+              }
+            },
+            {
+              "name": "pageSize",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 10
+              }
+            },
+            {
+              "name": "dataType",
+              "in": "query",
+              "schema": {
+                "$ref": "#/components/schemas/KpiType"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/kpi/{kpiId}": {
+        "patch": {
+          "tags": [
+            "Kpi"
+          ],
+          "summary": "Updates KPI",
+          "operationId": "UpdateKpi",
+          "parameters": [
+            {
+              "name": "kpiId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateKpiRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateKpiRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateKpiRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateKpiRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Kpi"
+          ],
+          "summary": "Delete KPI",
+          "operationId": "DeleteKpi",
+          "parameters": [
+            {
+              "name": "kpiId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/kpi/{kpiId}/departments": {
+        "get": {
+          "tags": [
+            "Kpi"
+          ],
+          "summary": "Fetch all the departments associated with the specified KPI.",
+          "operationId": "FetchAllDepartmentForKpi",
+          "parameters": [
+            {
+              "name": "kpiId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/notifications": {
+        "get": {
+          "tags": [
+            "Notification"
+          ],
+          "summary": "Fetch User Notification.",
+          "operationId": "GetUserNotifications",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/notifications/{notificationId}/mark-read": {
+        "put": {
+          "tags": [
+            "Notification"
+          ],
+          "summary": "Mark user notification as read.",
+          "operationId": "MarkUserNotificationAsRead",
+          "parameters": [
+            {
+              "name": "notificationId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            {
+              "name": "userId",
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/users": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Create a new user.",
+          "operationId": "CreateUser",
+          "requestBody": {
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUserRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUserRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUserRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUserRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Get all users.",
+          "operationId": "GetAllUsers",
+          "parameters": [
+            {
+              "name": "pageNumber",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 1
+              }
+            },
+            {
+              "name": "pageSize",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 10
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/users/email/{email}": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Get a specific user via email.",
+          "operationId": "GetUserByEmail",
+          "parameters": [
+            {
+              "name": "email",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/users/{userId}": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Get a specific user via userId.",
+          "operationId": "GetUserByUserId",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Update user info.",
+          "operationId": "UpdateUser",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json-patch+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserRequest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Delete a speficied user.",
+          "operationId": "DeleteUserById",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/v1/users/{userId}/department/{departmentId}": {
+        "put": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Add user to the department.",
+          "operationId": "AddUserToDepartment",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Deletes user from the department.",
+          "operationId": "RemoveUserFromDepartment",
+          "parameters": [
+            {
+              "name": "departmentId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "AddCommentRequest": {
+          "required": [
+            "text"
+          ],
+          "type": "object",
+          "properties": {
+            "text": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "AssignKpiDeadlineRequest": {
+          "required": [
+            "contributorDeadline"
+          ],
+          "type": "object",
+          "properties": {
+            "contributorDeadline": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "managerDeadline": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        },
+        "AssignKpiRequest": {
+          "type": "object",
+          "properties": {
+            "targetValue": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "actualValue": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "additionalProperties": false
+        },
+        "CreateDepartmentRequest": {
+          "required": [
+            "name"
+          ],
+          "type": "object",
+          "properties": {
+            "name": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "CreateKpiRequest": {
+          "required": [
+            "dataType",
+            "description",
+            "name"
+          ],
+          "type": "object",
+          "properties": {
+            "name": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "dataType": {
+              "$ref": "#/components/schemas/KpiType"
+            },
+            "description": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "CreateUserRequest": {
+          "required": [
+            "email",
+            "name",
+            "role"
+          ],
+          "type": "object",
+          "properties": {
+            "name": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "email": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "role": {
+              "$ref": "#/components/schemas/UserRole"
+            },
+            "departmentId": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "DepartmentKpiEditRequest": {
+          "type": "object",
+          "properties": {
+            "targetValue": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            },
+            "actualValue": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "KpiType": {
+          "enum": [0, 1, 2],
+          "type": "integer",
+          "format": "int32"
+        },
+        "Status": {
+          "enum": [0, 1, 2, 3],
+          "type": "integer",
+          "format": "int32"
+        },
+        "TokenRequest": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "UpdateDepartmentRequest": {
+          "required": [
+            "name"
+          ],
+          "type": "object",
+          "properties": {
+            "name": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "UpdateKpiRequest": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "nullable": true
+            },
+            "description": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "UpdateUserRequest": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "nullable": true
+            },
+            "role": {
+              "$ref": "#/components/schemas/UserRole"
+            }
+          },
+          "additionalProperties": false
+        },
+        "UserRole": {
+          "enum": [0, 1, 2],
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "securitySchemes": {
+        "Bearer": {
+          "type": "http",
+          "description": "Enter your JWT token, which starts with 'ey', to authorize.",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    },
+    "security": [
+      {
+        "Bearer": []
+      }
+    ]
+  }

@@ -1,0 +1,16 @@
+<div class="login-container">
+  <div class="frame">
+  <h1>Welcome to the Dashboard and Report Generation Portal</h1>
+
+
+  <mat-card appearance="outlined" class="login-card">
+    <!-- <img src="/assets/images/logoheader.png"> -->
+    <img src="../../assets/sec/image_250-removebg-preview.png" alt="">
+    <mat-form-field appearance="outline" style="width: 100%; margin-top: 16px;">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" name="email" [(ngModel)]="email" placeholder="name@example.com">
+    </mat-form-field>
+    <button mat-raised-button (click)="login()" [disabled]="isWorking">LOGIN</button>
+  </mat-card>
+</div>
+</div>

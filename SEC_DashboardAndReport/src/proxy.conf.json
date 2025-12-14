@@ -1,0 +1,19 @@
+{
+  "/api": {
+    "target": "https://ea858de2f804.ngrok-free.app",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "xfwd": true,
+    "headers": { "ngrok-skip-browser-warning": "true" }
+  },
+  "/notificationHub": {
+    "target": "https://ea858de2f804.ngrok-free.app",
+    "ws": true,
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "xfwd": true,
+    "headers": { "ngrok-skip-browser-warning": "true" }
+  }
+}

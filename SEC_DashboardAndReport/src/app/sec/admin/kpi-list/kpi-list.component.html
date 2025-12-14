@@ -1,0 +1,80 @@
+<div class="kpi-list-container">
+  <div class="header-section">
+    <h2>KPI Management</h2>
+    <button mat-raised-button color="primary" (click)="addKpi()" [disabled]="userRole == 'Contributor'"
+    [class.faded]="userRole === 'Contributor'"
+    [matTooltip]="userRole === 'Contributor' ? 'Only admins and department manager can add KPIs' : ''">
+      <mat-icon>add</mat-icon>
+      Add KPI
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" matSort class="kpi-table">
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let kpi">{{ kpi.name }}</td>
+      </ng-container>
+
+      <!-- Data Type Column -->
+      <ng-container matColumnDef="dataType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Data Type</th>
+        <td mat-cell *matCellDef="let kpi">{{ kpi.dataType }}</td>
+      </ng-container>
+
+      <!-- Description Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Description</th>
+        <td mat-cell *matCellDef="let kpi">{{ kpi.description }}</td>
+      </ng-container>
+
+      <!-- Target Value Column -->
+      <ng-container matColumnDef="targetValue">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Target Value</th>
+        <td mat-cell *matCellDef="let kpi">{{ kpi.targetValue || 'Not set' }}</td>
+      </ng-container>
+
+      <!-- Created At Column -->
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Created At</th>
+        <td mat-cell *matCellDef="let kpi">{{ kpi.createdAt | date:'medium' }}</td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let kpi">
+          <div class="action-buttons">
+          <button mat-icon-button (click)="editKpi(kpi)" matTooltip="Edit KPI">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="viewDepartments(kpi)" matTooltip="View Dashboards">
+            <mat-icon>apartment</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteKpi(kpi)" matTooltip="Delete KPI">
+            <mat-icon>delete</mat-icon>
+          </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    
+    <div *ngIf="!loading && dataSource.data.length === 0" class="no-data">
+      <mat-icon class="no-data-icon">chart</mat-icon>
+      <h3>No KPIs Found</h3>
+      <p>No kpis are available at the moment.</p>
+    </div>
+    <mat-paginator
+      [length]="totalCount"
+      [pageSize]="pageSize"
+      [pageIndex]="pageIndex"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onPageChange($event)"
+      showFirstLastButtons>
+    </mat-paginator>
+  </div>
+</div>

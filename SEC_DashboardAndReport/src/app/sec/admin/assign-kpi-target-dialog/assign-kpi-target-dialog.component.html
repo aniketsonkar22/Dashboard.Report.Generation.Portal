@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>{{ data.editMode ? 'Edit KPI Values' : 'Assign KPI to ' + data.departmentName }}</h2>
+<mat-dialog-content [formGroup]="kpiForm">
+  <!-- KPI Name - Read-only -->
+  <br/>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>KPI Name</mat-label>
+    <input matInput [value]="selectedKpi?.name || 'N/A'" readonly>
+  </mat-form-field>
+
+  <!-- Loading indicator -->
+  <div *ngIf="loadingValues" class="loading-indicator">
+    <mat-spinner diameter="30"></mat-spinner>
+    <span>Loading current values...</span>
+  </div>
+
+  <!-- Form fields -->
+  <div *ngIf="!loadingValues">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Target Value</mat-label>
+      <input matInput formControlName="targetValue" type="number" placeholder="Enter target value" (input)="onTargetValueChange()">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Actual Value (Optional)</mat-label>
+      <input matInput formControlName="actualValue" type="number" placeholder="Enter actual value" (input)="onActualValueChange()">
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary" (click)="onAssign()" [disabled]="!kpiForm.valid || !selectedKpi || loading || loadingValues || (data.editMode && !hasChanges())"
+    [class.disabled-save]="data.editMode && !hasChanges()">
+    {{ data.editMode ? 'Save' : 'Assign' }}
+  </button>
+</mat-dialog-actions>

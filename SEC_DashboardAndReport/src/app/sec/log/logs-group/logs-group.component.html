@@ -1,0 +1,3 @@
+<button mat-raised-button class="addBtn" color="primary" (click)="goToReport()">Go To Report</button>
+<app-log-item *ngFor="let item of REPORT_LOG_DATA" [logItem]="item" [logId]="logId"></app-log-item>
+<div class="emptyMsg" *ngIf="REPORT_LOG_DATA.length<1">There are currently no logs to view. Check back later for updates.</div>

@@ -1,0 +1,53 @@
+<mat-card appearance="outlined" [@toggleReplies] [id]="commentItem.id" [ngClass]="commentId == commentItem.id ?'highlight':''">
+  <div class="comment-item" (mouseenter)="commentId=0">
+    <div class="comment-content">
+      <mat-icon class="comment-icon">comment</mat-icon>
+      <p class="comment-text">{{ commentItem.commentText }}. <span *ngIf="commentItem.lineItem"> In 
+          {{commentItem.lineItem}}</span> </p>
+    </div>
+    <div class="comment-footer">
+      <div class="comment-side">
+        <div class="comment-info">
+          <!-- <mat-chip-listbox>
+            <mat-chip-option class="status-chip" [ngClass]="getStatusClass(commentItem.status)">
+              {{ commentItem.status }}
+            </mat-chip-option>
+          </mat-chip-listbox> -->
+          <span class="user-info">
+            {{ commentItem.userName }}
+            <mat-icon style="font-size: 40px; width: 40px; height: 40px; color: #1c5196;">account_circle</mat-icon>
+          </span>
+        </div>
+        <div class="comment-details">
+          <span>{{ commentItem.department }}</span>
+          <span> | </span>
+          <span class="timestamp">{{ commentItem.timestamp | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+      </div>
+      <!-- <button mat-icon-button class="options-button" [mat-menu-trigger-for]="commentMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #commentMenu="matMenu">
+        <button mat-menu-item (click)="changeStatus('Actioned')" style="color: #1c5196;">Approve</button>
+        <button mat-menu-item (click)="changeStatus('Declined')" style="color: #D32F2F;">Decline</button>
+        <button mat-menu-item (click)="openReplyDialog(commentItem)">Reply</button>
+      </mat-menu> -->
+    </div>
+  </div>
+  <!-- <div class="toggle" (click)="toggleReplies()" matTooltip="Toggle comments">
+    <mat-icon *ngIf="!showReplies" class="comment-icon">keyboard_arrow_down</mat-icon>
+    <mat-icon *ngIf="showReplies" class="comment-icon">keyboard_arrow_up</mat-icon>
+  </div> -->
+
+  <!-- Replies thread section -->
+  <!-- <div *ngIf="commentItem.replies?.length && showReplies" class="replies-thread" [@toggleReplies]>
+    <ng-container *ngFor="let reply of commentItem.replies">
+      <div class="reply-item">
+        <p><strong>{{ reply.userName }}:</strong> {{ reply.commentText }}</p>
+        <span class="reply-details">{{ reply.timestamp }}</span>
+      </div>
+    </ng-container>
+  </div>
+  <div class="emptyMsg" *ngIf="!commentItem.replies?.length && showReplies" [@toggleReplies]>No replies yet.</div> -->
+
+</mat-card>

@@ -1,0 +1,160 @@
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px 8px 24px;
+  border-bottom: 1px solid #e0e0e0;
+  
+  .dialog-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: #1976d2;
+    }
+  }
+  
+  .user-count {
+    font-size: 14px;
+    color: #666;
+    background: #f5f5f5;
+    padding: 4px 8px;
+    border-radius: 12px;
+  }
+}
+
+// .dialog-content {
+//   padding: 16px 24px;
+//   max-height: 400px;
+//   overflow-y: auto;
+//   padding-top: 1rem !important;
+// }
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  text-align: center;
+  color: #666;
+  
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    margin-bottom: 8px;
+    opacity: 0.6;
+  }
+  
+  span {
+    font-size: 14px;
+  }
+}
+
+.users-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: #f0f0f0;
+    border-color: #d0d0d0;
+  }
+  
+  .user-info {
+    flex: 1;
+    min-width: 0;
+    
+    .user-main {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+      
+      .user-name {
+        font-weight: 500;
+        font-size: 14px;
+        color: #333;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px;
+      }
+      
+      .role-chip {
+        font-size: 11px;
+        height: 20px;
+        line-height: 20px;
+        min-width: 50px;
+        text-align: center;
+      }
+    }
+    
+    .user-email {
+      font-size: 12px;
+      color: #666;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+  }
+  
+  .remove-btn {
+    width: 32px;
+    height: 32px;
+    margin-left: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      line-height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    &:hover {
+      background-color: rgba(244, 67, 54, 0.1);
+    }
+  }
+}
+
+.dialog-actions {
+  padding: 16px 24px;
+  border-top: 1px solid #e0e0e0;
+  background: #fafafa;
+  
+  button {
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+mat-dialog-content{
+  padding-top: 1rem !important;
+}

@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>Assign KPI Deadlines</h2>
+
+<mat-dialog-content>
+  <p>You are about to assign deadlines for the KPI: <strong>{{ data.kpiName }}</strong></p>
+  <p>Please set the contributor and manager deadlines for this KPI.</p>
+  
+  <form [formGroup]="unlockForm" class="unlock-form">
+    <div class="datetime-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Contributor Deadline (Date)</mat-label>
+        <input matInput [matDatepicker]="contribPicker" [min]="todayDate" formControlName="contributorDate" required>
+        <mat-datepicker-toggle matIconSuffix [for]="contribPicker"></mat-datepicker-toggle>
+        <mat-datepicker #contribPicker></mat-datepicker>
+        <mat-error *ngIf="unlockForm.get('contributorDate')?.hasError('required')">
+          Contributor date is required
+        </mat-error>
+      </mat-form-field>
+   
+    </div>
+
+    <div class="datetime-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Manager Deadline (Date) </mat-label>
+        <input matInput [matDatepicker]="managerPicker" [min]="todayDate" formControlName="managerDate">
+        <mat-datepicker-toggle matIconSuffix [for]="managerPicker"></mat-datepicker-toggle>
+        <mat-datepicker #managerPicker></mat-datepicker>
+      </mat-form-field>
+
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="loading">
+    Cancel
+  </button>
+  <button 
+    mat-raised-button 
+    color="primary" 
+    (click)="onUnlock()" 
+    [disabled]="!unlockForm.valid || loading"
+    [class.loading]="loading">
+    <mat-icon *ngIf="!loading">schedule</mat-icon>
+    <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+    Assign Deadlines
+  </button>
+</mat-dialog-actions>

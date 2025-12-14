@@ -1,0 +1,124 @@
+@use '@angular/material' as mat;
+@use 'sass:map'; // Import SASS's map utility
+
+// Define the custom color palettes using exact color codes
+$primary-color: mat.m2-define-palette((
+  50: #e1e7f4,
+  100: #b3c3e0,
+  200: #809acd,
+  300: #4d71b9,
+  400: #2655aa,
+  500: #1c5196,  // Primary color #1C5196
+  600: #1a4a8e,
+  700: #184084,
+  800: #15387a,
+  900: #0e2b6a,
+  A100: #c0cbff,
+  A200: #8da3ff,
+  A400: #5a7aff,
+  A700: #4166ff,
+  contrast: (
+    500: white
+  )
+));
+
+$accent-color: mat.m2-define-palette((
+  50: #ffe0cc,
+  100: #ffb399,
+  200: #ff8a66,
+  300: #ff612f,
+  400: #ff5019,
+  500: #ef6c00,  // Updated Accent color #EF6C00
+  600: #e66400,
+  700: #d95c00,
+  800: #cc5200,
+  900: #b34200,
+  A100: #ffdacc,
+  A200: #ffaa99,
+  A400: #ff7a66,
+  A700: #ff5a33,
+  contrast: (
+    500: white
+  )
+));
+$success-color: mat.m2-define-palette((
+  50: #e8f5e9,
+  100: #c8e6c9,
+  200: #a5d6a7,
+  300: #81c784,
+  400: #66bb6a,
+  500: #4caf50,
+  600: #43a047,
+  700: #388e3c,
+  800: #2e7d32,  // Main success color #2E7D32
+  900: #1b5e20,
+  A100: #b9f6ca,
+  A200: #69f0ae,
+  A400: #00e676,
+  A700: #00c853,
+  contrast: (
+    800: white // White contrast color for the main success color
+  )
+));
+$warn-color: mat.m2-define-palette(mat.$m2-red-palette);
+
+// Define the custom theme using maps
+$custom-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $primary-color,
+    accent: $accent-color,
+    warn: $warn-color,
+    success:$success-color,
+    basic:$success-color
+  ),
+  // typography: (
+  //   font-family: 'Inter', sans-serif;
+  // ),
+  background: (
+    background: white,  // White background
+    card: #f7f7f7       // Light grey background for cards
+  )
+));
+
+// Apply the theme to all Angular Material components
+@include mat.all-component-themes($custom-theme);
+
+// Customize the mat-menu-item colors using the correct palette maps
+.menu-theme {
+  // Using Angular Material's theming mixins
+  @include mat.menu-color((
+    foreground: $primary-color,  
+    background: $accent-color,   
+  ));
+
+  // Customize mat-menu-item within the menu
+  .mat-mdc-menu-item {
+    color: mat.m2-get-color-from-palette($primary-color, 500);  // Primary color for text
+    &:hover {
+      // background-color: mat.get-color-from-palette($accent-color, 500); // Accent color on hover
+      // color: white;  // White text on hover
+    }
+
+    mat-icon {
+      color: mat.m2-get-color-from-palette($primary-color, 500);  // Primary color for icons
+    }
+  }
+}
+
+.success{
+  background-color: #2E7D32;
+  color: white;
+}
+
+h2,.page-title{
+  color: #1C5196;
+}
+
+.success-snackbar{
+color: mat.m2-get-color-from-palette($primary-color, 500);
+background-color: white;
+}
+.error-snackbar{
+color: mat.m2-get-color-from-palette($accent-color, 500);
+background-color: white;
+}

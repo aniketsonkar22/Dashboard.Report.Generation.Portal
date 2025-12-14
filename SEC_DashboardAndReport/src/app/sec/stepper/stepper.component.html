@@ -1,0 +1,7 @@
+<div *ngIf="init">
+<mat-horizontal-stepper [selectedIndex]="currentStageIndex" class="timeline-stepper" linear="true" [@toggleReplies]>
+  <mat-step *ngFor="let stage of stages; let i = index" [completed]="stage.completed" [editable]="false">
+    <ng-template matStepLabel>{{ stage.title }}</ng-template>
+  </mat-step>
+</mat-horizontal-stepper>
+</div>

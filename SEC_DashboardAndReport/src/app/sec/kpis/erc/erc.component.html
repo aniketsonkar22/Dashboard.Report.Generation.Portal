@@ -1,0 +1,290 @@
+<div class="kpi-page-container">
+  <h2 class="page-title">{{ kpiLabel }}</h2>
+  <p class="page-description">View and manage KPIs with advanced filtering and editing capabilities</p>
+
+  <!-- Dynamic Filters Section -->
+  <div class="filters-section" *ngIf="kpiFilters.length > 0">
+    <ng-container *ngFor="let filter of kpiFilters">
+      
+      <!-- Static Dropdown Filter -->
+      <mat-form-field 
+        *ngIf="filter.type === FilterType.STATIC" 
+        appearance="outline" 
+        class="filter-field">
+        <mat-label>{{ filter.label }}</mat-label>
+        <mat-select 
+          [(value)]="filterValues[filter.key]" 
+          (selectionChange)="onFilterChange(filter.key)">
+          <mat-option *ngFor="let option of filter.options" [value]="option.value">
+            {{ option.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Dynamic Dropdown Filter (populated from data) -->
+      <mat-form-field 
+        *ngIf="filter.type === FilterType.DYNAMIC" 
+        appearance="outline" 
+        class="filter-field">
+        <mat-label>{{ filter.label }}</mat-label>
+        <mat-select 
+          [(value)]="filterValues[filter.key]" 
+          (selectionChange)="onFilterChange(filter.key)">
+          <mat-option *ngFor="let option of filter.options" [value]="option.value">
+            {{ option.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Date Range Filter -->
+      <ng-container *ngIf="filter.type === FilterType.DATE_RANGE && filter.dateFields">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Date From</mat-label>
+          <input 
+            matInput 
+            [matDatepicker]="dateFromPicker" 
+            [(ngModel)]="filterValues[filter.dateFields.from]"
+            (dateChange)="onDateRangeChange()">
+          <mat-datepicker-toggle matSuffix [for]="dateFromPicker"></mat-datepicker-toggle>
+          <mat-datepicker #dateFromPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Date To</mat-label>
+          <input 
+            matInput 
+            [matDatepicker]="dateToPicker" 
+            [(ngModel)]="filterValues[filter.dateFields.to]"
+            (dateChange)="onDateRangeChange()">
+          <mat-datepicker-toggle matSuffix [for]="dateToPicker"></mat-datepicker-toggle>
+          <mat-datepicker #dateToPicker></mat-datepicker>
+        </mat-form-field>
+      </ng-container>
+    </ng-container>
+
+    <button mat-raised-button color="primary" (click)="clearFilters()">
+      <mat-icon>clear</mat-icon>
+      Clear Filters
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading KPIs...</p>
+  </div>
+
+  <!-- KPI Table -->
+  <div *ngIf="!loading" class="kpi-table-container">
+    <mat-card appearance="outlined" class="kpi-card">
+      <div class="table-header">
+        <h3>{{ kpiLabel }} ({{ dataSource.data.length }} total)</h3>
+        <div class="header-actions">
+          <button mat-icon-button class="add-button" (click)="startAddNew()" matTooltip="Add Record">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-icon-button class="download-button" (click)="downloadReports()" matTooltip="Download">
+            <mat-icon>download</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="table-content" *ngIf="dataSource.data.length > 0 || isAddingNew">
+        <table mat-table [dataSource]="dataSource" class="kpi-table">
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngIf="!isEditing(element)">
+                {{ element.date | date:'mediumDate' }}
+              </ng-container>
+              <mat-form-field *ngIf="isEditing(element)" appearance="outline" class="inline-edit-field">
+                <input matInput [matDatepicker]="picker" [(ngModel)]="editCache[element.id].date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <!-- Sector Column -->
+          <ng-container matColumnDef="sector">
+            <th mat-header-cell *matHeaderCellDef>Sector</th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngIf="!isEditing(element)">
+                <span>{{ element.sector }}</span>
+              </ng-container>
+              <mat-form-field *ngIf="isEditing(element)" appearance="outline" class="inline-edit-field">
+                <mat-select
+                    [(ngModel)]="editCache[element.id].sector"
+                    placeholder="Select Sector">
+                    <mat-option *ngFor="let sector of sectorOptions" [value]="sector.label">{{ sector.label }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <!-- ERC Columns -->
+          <ng-container matColumnDef="ext_Requirement_Type">
+            <th mat-header-cell *matHeaderCellDef>Requirement Type</th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngIf="!isEditing(element)">
+                <span>{{ element.ext_Requirement_Type }}</span>
+              </ng-container>
+              <mat-form-field *ngIf="isEditing(element)" appearance="outline" class="inline-edit-field">
+                <input matInput [(ngModel)]="editCache[element.id].ext_Requirement_Type">
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="total_Requirement">
+            <th mat-header-cell *matHeaderCellDef>Total Requirements</th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngIf="!isEditing(element)">
+                <span>{{ element.total_Requirement }}</span>
+              </ng-container>
+              <mat-form-field *ngIf="isEditing(element)" appearance="outline" class="inline-edit-field">
+                <input matInput type="number" [(ngModel)]="editCache[element.id].total_Requirement">
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ext_Requirements">
+            <th mat-header-cell *matHeaderCellDef>External Requirements</th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngIf="!isEditing(element)">
+                <span>{{ element.ext_Requirements }}</span>
+              </ng-container>
+              <mat-form-field *ngIf="isEditing(element)" appearance="outline" class="inline-edit-field">
+                <input matInput type="number" [(ngModel)]="editCache[element.id].ext_Requirements">
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <!-- Common Columns -->
+          <ng-container matColumnDef="createdBy">
+            <th mat-header-cell *matHeaderCellDef>Created By</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.createdBy || 'N/A' }}
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="action-buttons compact">
+                <!-- Edit Mode Actions -->
+                <ng-container *ngIf="isEditing(element)">
+                  <button mat-icon-button color="primary" (click)="saveEdit(element)" matTooltip="Save">
+                    <mat-icon>save</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="cancelEdit(element)" matTooltip="Cancel">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </ng-container>
+                
+                <!-- Normal Mode Actions -->
+                <ng-container *ngIf="!isEditing(element)">
+                  <button mat-icon-button [matMenuTriggerFor]="actionsMenu" matTooltip="Actions">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #actionsMenu="matMenu">
+                    <button mat-menu-item (click)="startEdit(element)">
+                      <mat-icon>edit</mat-icon>
+                      <span>Edit</span>
+                    </button>
+                  </mat-menu>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          
+          <!-- Add New Record Row -->
+          <ng-container *ngIf="isAddingNew">
+            <tr class="add-new-row">
+              <!-- Date Column -->
+              <td *ngIf="displayedColumns.includes('date')">
+                <mat-form-field appearance="outline" class="inline-edit-field">
+                  <input matInput [matDatepicker]="newPicker" [(ngModel)]="newRecordData.date" placeholder="Select Date">
+                  <mat-datepicker-toggle matSuffix [for]="newPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #newPicker></mat-datepicker>
+                </mat-form-field>
+              </td>
+
+              <!-- Sector Column -->
+              <td *ngIf="displayedColumns.includes('sector')">
+                <mat-form-field appearance="outline" class="inline-edit-field">
+                  <mat-select [(ngModel)]="newRecordData.sector" placeholder="Select Sector">
+                    <mat-option value="0">Northern</mat-option>
+                    <mat-option value="1">Eastern</mat-option>
+                    <mat-option value="2">Central</mat-option>
+                    <mat-option value="3">Western</mat-option>
+                    <mat-option value="4">Southern</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+
+              <!-- ERC Columns -->
+              <td *ngIf="displayedColumns.includes('ext_Requirement_Type')">
+                <mat-form-field appearance="outline" class="inline-edit-field">
+                  <input matInput [(ngModel)]="newRecordData.ext_Requirement_Type" placeholder="Requirement Type">
+                </mat-form-field>
+              </td>
+
+              <td *ngIf="displayedColumns.includes('total_Requirement')">
+                <mat-form-field appearance="outline" class="inline-edit-field">
+                  <input matInput type="number" [(ngModel)]="newRecordData.total_Requirement" placeholder="0">
+                </mat-form-field>
+              </td>
+
+              <td *ngIf="displayedColumns.includes('ext_Requirements')">
+                <mat-form-field appearance="outline" class="inline-edit-field">
+                  <input matInput type="number" [(ngModel)]="newRecordData.ext_Requirements" placeholder="0">
+                </mat-form-field>
+              </td>
+
+              <!-- Created By (Read-only/Empty for new records) -->
+              <td *ngIf="displayedColumns.includes('createdBy')">
+                <span class="text-muted">-</span>
+              </td>
+
+              <!-- Actions -->
+              <td *ngIf="displayedColumns.includes('actions')">
+                <div class="action-buttons compact">
+                  <button mat-icon-button color="primary" (click)="saveNewRecord()" matTooltip="Save">
+                    <mat-icon>save</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="cancelAddNew()" matTooltip="Cancel">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.editing-row]="isEditing(row)"></tr>
+        </table>
+      </div>
+
+      <!-- No Data State -->
+      <div *ngIf="dataSource.data.length === 0 && !loading" class="no-data">
+        <mat-icon class="no-data-icon">assessment</mat-icon>
+        <h3>No KPIs Found</h3>
+        <p>No data available for the selected filters.</p>
+      </div>
+
+      <!-- Pagination -->
+      <mat-paginator
+        *ngIf="dataSource.data.length > 0"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [length]="totalCount"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </mat-card>
+  </div>
+</div>

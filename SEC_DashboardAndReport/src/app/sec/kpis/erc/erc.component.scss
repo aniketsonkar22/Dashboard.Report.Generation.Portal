@@ -1,0 +1,438 @@
+.kpi-page-container {
+  padding: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.page-title {
+  color: #1c5196;
+  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.page-description {
+  color: #666;
+  margin-bottom: 24px;
+  font-size: 16px;
+}
+
+// Page header styles
+.page-header {
+  padding: 20px 0;
+  margin-bottom: 20px;
+}
+
+// Filters Section
+.filters-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: baseline;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  justify-content: space-between;
+}
+
+.filter-field {
+  min-width: 200px;
+  flex: 1;
+}
+
+.clear-button {
+  margin-left: auto;
+}
+
+// Loading State
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 800px 900px 590px;
+  text-align: center;
+  
+  p {
+    margin-top: 16px;
+    color: #666;
+  }
+}
+
+// KPI Table Container
+.kpi-table-container {
+  margin-top: 20px;
+}
+
+.kpi-card {
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-header {
+  background: #1c5196;
+  color: white;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .download-button {
+    color: white;
+  }
+}
+
+.table-content {
+  padding: 0;
+  overflow-x: auto;
+  min-width: 100%;
+}
+
+.kpi-table {
+  width: 100%;
+  min-width: 800px;
+  display: table;
+  table-layout: fixed;
+  
+  .mat-mdc-header-cell {
+    font-weight: 600;
+    color: #333;
+    background: #f8f9fa;
+    padding: 12px 8px;
+    font-size: 12px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .mat-mdc-cell {
+    padding: 12px 8px;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    
+    // Ensure content is visible
+    &:not(:has(.inline-edit-field)) {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  
+  .mat-mdc-row:hover {
+    background: #f8f9fa;
+  }
+}
+
+// Status badge for the new table
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+// No Data State
+.no-data {
+  text-align: center;
+  padding: 40px 24px;
+  color: #666;
+  
+  .no-data-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #ccc;
+    margin-bottom: 16px;
+  }
+  
+  h3 {
+    margin: 0 0 8px 0;
+    color: #333;
+  }
+  
+  p {
+    margin: 0 0 16px 0;
+    line-height: 1.5;
+  }
+}
+
+// FIXED: Inline edit fields for the new table structure
+.inline-edit-field {
+  width: 100% !important;
+  min-width: 80px !important;
+  margin: 0 !important;
+  display: block !important;
+
+  // Override Material form field wrapper
+  ::ng-deep {
+    .mat-mdc-form-field-wrapper {
+      padding-bottom: 0 !important;
+      margin-bottom: 0 !important;
+      padding-top: 0 !important;
+      margin-top: 0 !important;
+    }
+
+    .mat-mdc-form-field-flex {
+      padding: 0 !important;
+      align-items: center !important;
+      height: 32px !important;
+    }
+
+    .mat-mdc-form-field-infix {
+      padding: 0 !important;
+      border-top: 0 !important;
+      min-height: 32px !important;
+      max-height: 32px !important;
+      height: 32px !important;
+      display: flex !important;
+      align-items: center !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      padding: 0 !important;
+      height: 32px !important;
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none !important;
+      height: 0 !important;
+    }
+
+    .mat-mdc-form-field-underline,
+    .mdc-line-ripple {
+      display: none !important;
+    }
+
+    .mat-mdc-form-field-hint-wrapper,
+    .mat-mdc-form-field-error-wrapper {
+      display: none !important;
+      height: 0 !important;
+    }
+
+    // Style the actual input
+    input {
+      width: 100% !important;
+      font-size: 12px !important;
+      padding: 6px 8px !important;
+      border: 1px solid #1c5196 !important;
+      border-radius: 4px !important;
+      background: white !important;
+      box-sizing: border-box !important;
+      height: 32px !important;
+      line-height: normal !important;
+      margin: 0 !important;
+      
+      &:focus {
+        outline: 2px solid #1c5196 !important;
+        outline-offset: 0 !important;
+        border-color: #1c5196 !important;
+      }
+
+      &::placeholder {
+        color: #999 !important;
+      }
+    }
+
+    // Datepicker toggle
+    .mat-datepicker-toggle {
+      position: absolute !important;
+      right: 2px !important;
+      top: 0 !important;
+      height: 32px !important;
+      transform: none !important;
+      display: flex !important;
+      align-items: center !important;
+      
+      button {
+        width: 28px !important;
+        height: 28px !important;
+        padding: 0 !important;
+        
+        .mat-mdc-button-touch-target {
+          width: 28px !important;
+          height: 28px !important;
+        }
+      }
+
+      svg {
+        width: 18px !important;
+        height: 18px !important;
+      }
+    }
+
+    // Datepicker input with toggle
+    .mat-datepicker-input {
+      padding-right: 32px !important;
+    }
+
+    // Material suffix container
+    .mat-mdc-form-field-icon-suffix {
+      height: 32px !important;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+
+    .mat-mdc-select-trigger {
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 0 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    font-size: 12px !important;
+    }
+
+    .mat-mdc-select-value {
+    display: flex !important;
+    align-items: center !important;
+    font-size: 12px !important;
+    line-height: normal !important;
+    }
+
+    .mat-mdc-select-arrow-wrapper {
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    }
+
+    .mat-mdc-select {
+    height: 32px !important;
+    }
+  }
+}
+
+// FIXED: Editing row highlight
+.editing-row {
+  background-color: #fff3e0 !important;
+  
+  &:hover {
+    background-color: #ffe0b2 !important;
+  }
+
+  .mat-mdc-cell {
+    border-bottom-color: #ffb74d !important;
+    
+    // Ensure inline edit fields are visible in editing mode
+    .inline-edit-field {
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-buttons.compact {
+  gap: 0;
+}
+
+.mat-mdc-row {
+  &.row-approved {
+    background-color: #ffffff !important;
+    
+    &:hover {
+      background-color: #f8f9fa !important;
+    }
+    
+    .mat-mdc-cell {
+      border-bottom-color: #e9ecef;
+      color: inherit;
+    }
+  }
+  
+  &:not(.row-approved):hover {
+    background: #f8f9fa;
+  }
+}
+
+// Snackbar styles for notifications
+::ng-deep {
+  .snackbar-success {
+    background-color: #4caf50 !important;
+    color: white !important;
+    
+    .mat-mdc-snack-bar-label {
+      color: white !important;
+    }
+  }
+
+  .snackbar-error {
+    background-color: #f44336 !important;
+    color: white !important;
+    
+    .mat-mdc-snack-bar-label {
+      color: white !important;
+    }
+  }
+
+  .snackbar-info {
+    background-color: #2196f3 !important;
+    color: white !important;
+    
+    .mat-mdc-snack-bar-label {
+      color: white !important;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .filters-section {
+    flex-direction: column;
+    align-items: stretch;
+    
+    .filter-field {
+      min-width: unset;
+    }
+    
+    .clear-button {
+      margin-left: 0;
+      margin-top: 8px;
+    }
+  }
+  
+  .kpi-table {
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+      padding: 4px 2px;
+      font-size: 10px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .kpi-page-container {
+    padding: 10px;
+    max-width: 100%;
+  }
+  
+  .kpi-table {
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+      padding: 3px 1px;
+      font-size: 9px;
+    }
+  }
+}

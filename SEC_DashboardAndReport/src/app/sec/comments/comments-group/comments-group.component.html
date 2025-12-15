@@ -1,5 +1,0 @@
-
-<app-comment-item *ngFor="let item of comments" [commentItem]="item"
-  (statusChanged)="onStatusChanged()" [commentId]="commentId"></app-comment-item>
-<div class="emptyMsg" *ngIf="comments.length<1">There are currently no Comments to view. Check back later for updates.
-</div>

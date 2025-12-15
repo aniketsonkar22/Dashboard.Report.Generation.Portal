@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { KpiTableComponent } from './sec/kpi-table/kpi-table.component';
+import { BcpComponent } from './sec/kpis/bcp/bcp.component';
+import { DntComponent } from './sec/kpis/dnt/dnt.component';
+import { ErcComponent } from './sec/kpis/erc/erc.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login' , pathMatch:'full'},
@@ -9,27 +11,28 @@ const routes: Routes = [
     loadChildren: () =>
     import('./login/login.module').then((m) => m.LoginModule),
   },
-  //  {
-  //   path: 'kpi',
-  //   children: [
-  //     { path: '', redirectTo: 'bcp', pathMatch: 'full' },
-  //     { path: 'bcp', component: BcpComponent },
-  //     { path: 'dnt', component: DntComponent },
-  //     { path: 'erc', component: ErcComponent }
-  //   ]
-  // },
-  // Single KPI Route with type parameter
-  {
-    path: 'kpi/:type',
-    component: KpiTableComponent,
-    data: { title: 'KPI Management' }
-  },
-
+  
   // Redirect /kpi to /kpi/bcp as default
   {
     path: 'kpi',
-    redirectTo: 'kpi/bcp',
-    pathMatch: 'full'
+    children: [
+      { path: '', redirectTo: 'bcp', pathMatch: 'full' },
+      { 
+        path: 'bcp', 
+        component: BcpComponent,
+        data: { title: 'BCPs Review & Update' }
+      },
+      { 
+        path: 'dnt', 
+        component: DntComponent,
+        data: { title: 'Drills & Tests Conducted' }
+      },
+      { 
+        path: 'erc', 
+        component: ErcComponent,
+        data: { title: 'External Requirements Closure' }
+      }
+    ]
   },
   {
     path: '',

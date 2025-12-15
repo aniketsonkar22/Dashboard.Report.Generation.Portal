@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NotificationService } from './services/notification.service';
 
 @Component({
     selector: 'app-root',
@@ -10,11 +9,7 @@ import { NotificationService } from './services/notification.service';
 })
 export class AppComponent {
   title = 'pc-app';
-  constructor(public router: Router, private notifications: NotificationService) { }
+  constructor(public router: Router) { }
 
-  ngOnInit(): void {
-    // Start SignalR connection when app boots
-    this.notifications.start();
-  }
-
+  ngOnInit(): void {}
 }

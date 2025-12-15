@@ -1,93 +1,35 @@
 <mat-toolbar class="navbar mat-elevation-z4">
   <div class="navbar-left">
-    <button mat-icon-button class="burger-menu" (click)="toggleMenu()" aria-label="Menu">
-      <mat-icon>menu</mat-icon>
-    </button>
 
     <img src="assets/sec/image_250-removebg-preview.png" alt="Logo" class="logo" />
 
-    <div class="nav-links"
-      [ngClass]="{ 'mobile-menu-open': isMobileMenuOpen, 'slide-in': isMobileMenuOpen, 'slide-out': !isMobileMenuOpen && wasMobileMenuOpen }">
+    <div class="nav-links">
       
       <!-- KPI Menu -->
       <a mat-button [matMenuTriggerFor]="kpiMenu" class="link" [ngClass]="{'active-link': isKpiActive}">
         KPIs
       </a>
       <mat-menu #kpiMenu="matMenu">
-        <button mat-menu-item routerLink="/kpi/bcp" routerLinkActive="active-link" (click)="closeMenu()">
+        <button mat-menu-item routerLink="/kpi/bcp" routerLinkActive="active-link">
           BCPs Review & Update
         </button>
-        <button mat-menu-item routerLink="/kpi/dnt" routerLinkActive="active-link" (click)="closeMenu()">
+        <button mat-menu-item routerLink="/kpi/dnt" routerLinkActive="active-link">
           Drills & Tests Conducted
         </button>
-        <button mat-menu-item routerLink="/kpi/erc" routerLinkActive="active-link" (click)="closeMenu()">
+        <button mat-menu-item routerLink="/kpi/erc" routerLinkActive="active-link">
           External Requirements Closure
         </button>
       </mat-menu>
-
-      <!-- Other navigation links can be uncommented as needed -->
-      <!-- <a mat-button routerLink="/home" routerLinkActive="active-link" class="link" (click)="closeMenu()">Overview</a> -->
-      
-      <!-- Reports Link with Conditional Active Class -->
-      <!-- <a mat-button [matMenuTriggerFor]="reportsMenu" class="link" [ngClass]="{'active-link': isReportsActive}">
-        Reports
-      </a>
-
-      <mat-menu #reportsMenu="matMenu">
-        <button mat-menu-item routerLink="/reports/distribution aggregation" routerLinkActive="active-link"
-          (click)="closeMenu()">Distribution Aggregation</button>
-        <button mat-menu-item routerLink="/reports/distribution" routerLinkActive="active-link"
-          (click)="closeMenu()">Distribution</button>
-        <button mat-menu-item routerLink="/reports/retail" routerLinkActive="active-link"
-          (click)="closeMenu()">Retail</button>
-        <button mat-menu-item routerLink="/reports/transmission" routerLinkActive="active-link"
-          (click)="closeMenu()">Transmission</button>
-        <button mat-menu-item routerLink="/reports/system operator" routerLinkActive="active-link"
-          (click)="closeMenu()">System Operator</button>
-      </mat-menu> -->
-
-      <!-- <a mat-button routerLink="/comments" routerLinkActive="active-link" class="link"
-        (click)="closeMenu()">Comments</a>
-      <a mat-button routerLink="/logs" routerLinkActive="active-link" class="link" (click)="closeMenu()"
-      *ngIf="userRole=='admin'">Logs</a>
-    
-      <a mat-button routerLink="/admin" routerLinkActive="active-link" class="link" (click)="closeMenu()"
-        *ngIf="userRole=='admin' || userRole=='departmentManager'">Admin</a> -->
     </div>
   </div>
 
   <span class="spacer"></span>
   <div class="navbar-right">
-    <!-- <button mat-icon-button [matMenuTriggerFor]="notificationMenu" class="notification-button">
-      <mat-icon>notifications</mat-icon>
-      <span [matBadge]="getUnreadNotificationsCount()" matBadgeColor="warn"></span>
-    </button> -->
-    <mat-menu #notificationMenu="matMenu">
-      <div *ngFor="let notification of notifications;">
-        <button mat-menu-item *ngIf="!notification.read" (click)="markAsRead(notification)">
-          <mat-icon>{{getIconForType(notification.type)}}</mat-icon>
-          {{ notification.message }}
-        </button>
-      </div>
-      <div *ngIf="getUnreadNotificationsCount() == 0">
-        <div style="width: 20rem; text-align:center; margin-top:1rem; color:gray;"> Nothing to show</div>
-      </div>
-    </mat-menu>
-
     <span class="welcome-message">Welcome, {{ userName }}</span>
-
     <button mat-icon-button [matMenuTriggerFor]="userMenu" id="user">
       <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #userMenu="matMenu">
-      <!-- <button mat-menu-item>
-        <mat-icon>person</mat-icon>
-        <span>Account</span>
-      </button>
-      <button mat-menu-item>
-        <mat-icon>settings</mat-icon>
-        <span>Settings</span>
-      </button> -->
       <div class="logout-button">
         <button mat-flat-button color="accent" (click)="logout()">Logout</button>
       </div>

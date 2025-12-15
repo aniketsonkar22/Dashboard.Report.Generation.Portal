@@ -1,0 +1,50 @@
+// add-kpi-dialog.component.scss
+
+h2 {
+  color: #1976d2;
+  margin-bottom: 0;
+}
+
+mat-dialog-content {
+  padding: 20px 24px;
+  min-width: 400px;
+  max-width: 500px;
+}
+
+.kpi-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .full-width {
+    width: 100%;
+  }
+
+  mat-form-field {
+    margin-bottom: 0;
+  }
+}
+
+mat-dialog-actions {
+  padding: 16px 24px;
+  border-top: 1px solid #e0e0e0;
+  
+  button {
+    margin-left: 8px;
+    
+    mat-icon {
+      margin-right: 4px;
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 600px) {
+  mat-dialog-content {
+    min-width: 300px;
+    max-width: 100%;
+  }
+}

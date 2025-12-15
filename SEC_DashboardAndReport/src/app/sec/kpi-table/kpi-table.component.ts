@@ -10,6 +10,7 @@ import { CommentDialogComponent } from '../comments/comment-dialog/comment-dialo
 import { UnlockKpiDialogComponent } from '../admin/unlock-kpi-dialog/unlock-kpi-dialog.component';
 import { RoleHelperService, AppRole } from '../../services/role-helper.service';
 import { DepartmentKpiApiService, AssignKpiDeadlineRequest } from '../../services/department-kpi-api.service';
+import { AddKpiDialogComponent } from '../add-kpi-dialog/add-kpi-dialog.component';
 
 // Base interface for all KPI items
 export interface BaseKpiItem {
@@ -24,6 +25,23 @@ export interface BaseKpiItem {
   [key: string]: any;
 }
 
+// Filter type enum
+enum FilterType {
+  STATIC = 'static',      // Predefined options
+  DYNAMIC = 'dynamic',    // Extract from fetched data
+  DATE_RANGE = 'dateRange' // Date range (from/to)
+}
+
+// KPI Filter Interface
+interface KpiFilter {
+  key: string;
+  label: string;
+  type: FilterType;
+  options?: { value: string; label: string }[]; // For static filters
+  dynamicField?: string; // Field name to extract distinct values from
+  dateFields?: { from: string; to: string }; // For date range filters
+}
+
 // KPI Configuration Interface
 interface KpiConfig {
   id: string;
@@ -32,12 +50,6 @@ interface KpiConfig {
   apiEndpoint: string;
   filters?: KpiFilter[];
   editableFields?: string[]; // Fields that can be edited
-}
-
-interface KpiFilter {
-  key: string;
-  label: string;
-  options: { value: string; label: string }[];
 }
 
 @Component({
@@ -49,6 +61,9 @@ interface KpiFilter {
 export class KpiTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  // Expose FilterType enum to template
+  FilterType = FilterType;
+
   // KPI Configurations
   private kpiConfigs: { [key: string]: KpiConfig } = {
     'bcp': {
@@ -56,27 +71,40 @@ export class KpiTableComponent implements OnInit {
       label: 'BCPs Review & Update for Corporate & BLs',
       columns: ['date', 'sector', 'type', 'bLs', 'bcPs_Reviewed', 'total_BCPs', 'createdBy', 'actions'],
       apiEndpoint: '/api/v1/bcp',
-      editableFields: ['date', 'sector', 'type', 'bl', 'bcPs_Reviewed', 'total_BCPs'],
+      editableFields: ['date', 'sector', 'type', 'bLs', 'bcPs_Reviewed', 'total_BCPs'],
       filters: [
+        {
+          key: 'dateRange',
+          label: 'Date Range',
+          type: FilterType.DATE_RANGE,
+          dateFields: { from: 'dateFrom', to: 'dateTo' }
+        },
+        {
+          key: 'sector',
+          label: 'Sector',
+          type: FilterType.STATIC,
+          options: [
+            { value: '', label: 'All Sectors' },
+            { value: '0', label: 'Northern' },
+            { value: '1', label: 'Eastern' },
+            { value: '2', label: 'Central' },
+            { value: '3', label: 'Western' },
+            { value: '4', label: 'Southern' }
+          ]
+        },
         {
           key: 'type',
           label: 'Type',
-          options: [
-            { value: '', label: 'All Types' },
-            { value: 'Corporate', label: 'Corporate' },
-            { value: 'BL1', label: 'BL1' },
-            { value: 'BL2', label: 'BL2' }
-          ]
+          type: FilterType.DYNAMIC,
+          dynamicField: 'type', // Field name in the API response
+          options: [] // Will be populated from data
         },
         {
           key: 'bLs',
           label: 'BLs',
-          options: [
-            { value: '', label: 'All BLs' },
-            { value: 'BL1', label: 'BL1' },
-            { value: 'BL2', label: 'BL2' },
-            { value: 'BL3', label: 'BL3' }
-          ]
+          type: FilterType.DYNAMIC,
+          dynamicField: 'bLs', // Field name in the API response
+          options: [] // Will be populated from data
         }
       ]
     },
@@ -88,25 +116,37 @@ export class KpiTableComponent implements OnInit {
       editableFields: ['date', 'sector', 'drillType', 'drillConducted', 'plannedDrills', 'correctiveActions', 'correctiveType'],
       filters: [
         {
+          key: 'dateRange',
+          label: 'Date Range',
+          type: FilterType.DATE_RANGE,
+          dateFields: { from: 'from', to: 'to' }
+        },
+        {
+          key: 'sector',
+          label: 'Sector',
+          type: FilterType.STATIC,
+          options: [
+            { value: '', label: 'All Sectors' },
+            { value: '0', label: 'Northern' },
+            { value: '1', label: 'Eastern' },
+            { value: '2', label: 'Central' },
+            { value: '3', label: 'Western' },
+            { value: '4', label: 'Southern' }
+          ]
+        },
+        {
           key: 'drillType',
           label: 'Drill Type',
-          options: [
-            { value: '', label: 'All Drill Types' },
-            { value: 'Fire Drill', label: 'Fire Drill' },
-            { value: 'Evacuation', label: 'Evacuation' },
-            { value: 'IT Disaster Recovery', label: 'IT Disaster Recovery' },
-            { value: 'Tabletop Exercise', label: 'Tabletop Exercise' }
-          ]
+          type: FilterType.DYNAMIC,
+          dynamicField: 'drillType', // Field name in the API response
+          options: [] // Will be populated from data
         },
         {
           key: 'correctiveType',
           label: 'Corrective Type',
-          options: [
-            { value: '', label: 'All Corrective Types' },
-            { value: 'Preventive', label: 'Preventive' },
-            { value: 'Corrective', label: 'Corrective' },
-            { value: 'Detective', label: 'Detective' }
-          ]
+          type: FilterType.DYNAMIC,
+          dynamicField: 'correctiveType', // Field name in the API response
+          options: [] // Will be populated from data
         }
       ]
     },
@@ -118,15 +158,30 @@ export class KpiTableComponent implements OnInit {
       editableFields: ['date', 'sector', 'ext_Requirement_Type', 'total_Requirement', 'ext_Requirements'],
       filters: [
         {
+          key: 'dateRange',
+          label: 'Date Range',
+          type: FilterType.DATE_RANGE,
+          dateFields: { from: 'from', to: 'to' }
+        },
+        {
+          key: 'sector',
+          label: 'Sector',
+          type: FilterType.STATIC,
+          options: [
+            { value: '', label: 'All Sectors' },
+            { value: '0', label: 'Northern' },
+            { value: '1', label: 'Eastern' },
+            { value: '2', label: 'Central' },
+            { value: '3', label: 'Western' },
+            { value: '4', label: 'Southern' }
+          ]
+        },
+        {
           key: 'ext_Requirement_Type',
           label: 'Requirement Type',
-          options: [
-            { value: '', label: 'All Requirement Types' },
-            { value: 'Regulatory', label: 'Regulatory' },
-            { value: 'Compliance', label: 'Compliance' },
-            { value: 'Audit', label: 'Audit' },
-            { value: 'Legal', label: 'Legal' }
-          ]
+          type: FilterType.DYNAMIC,
+          dynamicField: 'ext_Requirement_Type', // Field name in the API response
+          options: [] // Will be populated from data
         }
       ]
     }
@@ -141,7 +196,7 @@ export class KpiTableComponent implements OnInit {
   displayedColumns: string[] = [];
 
   // Dynamic filters based on KPI type
-  filterValues: { [key: string]: string } = {};
+  filterValues: { [key: string]: any } = {};
 
   // Edit cache to store original values and track changes
   editCache: { [id: string]: any } = {};
@@ -158,6 +213,11 @@ export class KpiTableComponent implements OnInit {
 
   // Loading state
   loading = false;
+  initialLoad = true; // Track if this is the first load
+
+  // Add new record state
+  isAddingNew = false;
+  newRecordData: any = {};
 
   // Base URL (should be from environment)
   private baseUrl = 'http://localhost:5069';
@@ -185,6 +245,7 @@ export class KpiTableComponent implements OnInit {
         this.currentConfig = this.kpiConfigs[kpiType];
         this.displayedColumns = this.currentConfig.columns;
         this.initializeFilters();
+        this.initialLoad = true; // Reset initial load flag
         this.fetchReports();
       } else {
         // Invalid KPI type, redirect to default
@@ -204,9 +265,45 @@ export class KpiTableComponent implements OnInit {
     this.filterValues = {};
     if (this.currentConfig?.filters) {
       this.currentConfig.filters.forEach(filter => {
-        this.filterValues[filter.key] = '';
+        if (filter.type === FilterType.DATE_RANGE && filter.dateFields) {
+          this.filterValues[filter.dateFields.from] = null;
+          this.filterValues[filter.dateFields.to] = null;
+        } else {
+          this.filterValues[filter.key] = '';
+        }
       });
     }
+  }
+
+  /**
+   * Extract distinct values from data for dynamic filters
+   * @param data Array of items from API response
+   */
+  private populateDynamicFilters(data: any[]): void {
+    if (!this.currentConfig?.filters || data.length === 0) return;
+
+    this.currentConfig.filters.forEach(filter => {
+      if (filter.type === FilterType.DYNAMIC && filter.dynamicField) {
+        // Extract all values for this field
+        const allValues = data
+          .map(item => item[filter.dynamicField!])
+          .filter(value => value != null && value !== ''); // Remove null/empty values
+
+        // Get unique values
+        const uniqueValues = Array.from(new Set(allValues));
+
+        // Sort alphabetically
+        uniqueValues.sort();
+
+        // Build options array
+        filter.options = [
+          { value: '', label: `All ${filter.label}` },
+          ...uniqueValues.map(val => ({ value: val, label: val }))
+        ];
+
+        console.log(`Populated ${filter.label} with ${uniqueValues.length} distinct values:`, uniqueValues);
+      }
+    });
   }
 
   get kpiLabel(): string {
@@ -223,19 +320,27 @@ export class KpiTableComponent implements OnInit {
     this.loading = true;
     const apiUrl = `${this.baseUrl}${this.currentConfig.apiEndpoint}`;
     
-    // Build query parameters with pagination and filters
+    // Build query parameters
     const params: any = {
       pageNumber: this.pageIndex + 1,
-      pageSize: this.pageSize,
-      ...this.filterValues // Spread filter values
+      pageSize: this.pageSize
     };
 
-    // Remove empty filter values
-    Object.keys(params).forEach(key => {
-      if (params[key] === '' || params[key] === null || params[key] === undefined) {
-        delete params[key];
-      }
-    });
+    // Add filter values to params (only if NOT initial load for dynamic filters)
+    if (!this.initialLoad) {
+      Object.keys(this.filterValues).forEach(key => {
+        const value = this.filterValues[key];
+        
+        // Handle date values - convert to ISO string
+        if (value instanceof Date) {
+          params[key] = value.toISOString();
+        } else if (value !== '' && value !== null && value !== undefined) {
+          params[key] = value;
+        }
+      });
+    }
+
+    console.log('Fetching reports with params:', params);
 
     this.http.get<any>(apiUrl, { params, withCredentials: true }).subscribe({
       next: (response: any) => {
@@ -254,6 +359,12 @@ export class KpiTableComponent implements OnInit {
           totalCount = response.totalCount || items.length;
         }
 
+        // If this is the initial load, populate dynamic filters from the response data
+        if (this.initialLoad && items.length > 0) {
+          this.populateDynamicFilters(items);
+          this.initialLoad = false; // Mark initial load as complete
+        }
+
         // Map data to BaseKpiItem
         const tableData: BaseKpiItem[] = items.map(item => ({
           ...item,
@@ -270,6 +381,7 @@ export class KpiTableComponent implements OnInit {
         this.dataSource.data = [];
         this.totalCount = 0;
         this.loading = false;
+        this.initialLoad = false;
         this.showNotification('Error loading data', 'error');
       }
     });
@@ -278,6 +390,12 @@ export class KpiTableComponent implements OnInit {
   onFilterChange(filterKey: string): void {
     console.log(`Filter changed: ${filterKey} = ${this.filterValues[filterKey]}`);
     this.pageIndex = 0; // Reset to first page when filter changes
+    this.fetchReports();
+  }
+
+  onDateRangeChange(): void {
+    console.log('Date range changed:', this.filterValues);
+    this.pageIndex = 0;
     this.fetchReports();
   }
 
@@ -293,7 +411,7 @@ export class KpiTableComponent implements OnInit {
     this.fetchReports();
   }
 
-  // Edit functionality - FIXED
+  // Edit functionality
   startEdit(item: BaseKpiItem): void {
     // Create a deep copy of the item for editing
     this.editCache[item.id] = { ...item };
@@ -329,7 +447,6 @@ export class KpiTableComponent implements OnInit {
       
       // Special handling for date
       if (field === 'date') {
-        console.log("Updated Date - ", item[field]);
         let currentDate: string | null = null;
         let originalDate: string | null = null;
         
@@ -348,9 +465,6 @@ export class KpiTableComponent implements OnInit {
         } else if (originalValue) {
           originalDate = new Date(originalValue).toISOString();
         }
-
-        console.log("Current Date - ", currentDate);
-        console.log("Original Date - ", originalDate);
         
         if (currentDate && currentDate !== originalDate) {
           updated[field] = currentDate;
@@ -462,6 +576,158 @@ export class KpiTableComponent implements OnInit {
   downloadReports(): void {
     console.log('Download reports functionality');
     // Implement download logic
+  }
+
+  // Add new record functionality
+  startAddNew(): void {
+  if (!this.currentConfig) return;
+
+  // Open the dialog
+  const dialogRef = this.dialog.open(AddKpiDialogComponent, {
+    width: '500px',
+    disableClose: false, // Allow closing by clicking outside
+    data: {
+      kpiType: this.currentKpiType,
+      kpiLabel: this.currentConfig.label
+    }
+  });
+
+  // Handle dialog close
+  dialogRef.afterClosed().subscribe((payload: any) => {
+    if (payload) {
+      // User clicked Save - make the API call
+      this.saveNewKpiRecord(payload);
+    }
+    // If payload is null/undefined, user clicked Cancel or closed dialog
+  });
+}
+
+// Add this new method to handle the API call:
+private saveNewKpiRecord(payload: any): void {
+  if (!this.currentConfig) return;
+
+  const apiUrl = `${this.baseUrl}${this.currentConfig.apiEndpoint}`;
+  
+  console.log('Creating new record:', payload);
+  
+  this.http.post<any>(apiUrl, payload, { withCredentials: true }).subscribe({
+    next: (response) => {
+      this.showNotification('Record created successfully', 'success');
+      
+      // Refresh the table to show the new record
+      this.fetchReports();
+    },
+    error: (err) => {
+      console.error('Error creating record:', err);
+      this.showNotification('Failed to create record', 'error');
+    }
+  });
+}
+  private initializeNewRecord(): any {
+    const record: any = {
+      date: new Date(),
+      sector: ''
+    };
+
+    // Initialize fields based on KPI type
+    if (this.currentKpiType === 'bcp') {
+      record.type = '';
+      record.bLs = '';
+      record.bcPs_Reviewed = 0;
+      record.total_BCPs = 0;
+    } else if (this.currentKpiType === 'dnt') {
+      record.drillType = '';
+      record.drillConducted = 0;
+      record.plannedDrills = 0;
+      record.correctiveActions = 0;
+      record.correctiveType = '';
+    } else if (this.currentKpiType === 'erc') {
+      record.ext_Requirement_Type = '';
+      record.total_Requirement = 0;
+      record.ext_Requirements = 0;
+    }
+
+    return record;
+  }
+
+  cancelAddNew(): void {
+    this.isAddingNew = false;
+    this.newRecordData = {};
+    this.cdr.detectChanges();
+  }
+
+  saveNewRecord(): void {
+    if (!this.currentConfig) return;
+
+    // Build the request payload based on KPI type
+    const payload: any = {
+      date: this.newRecordData.date instanceof Date 
+        ? this.newRecordData.date.toISOString() 
+        : new Date(this.newRecordData.date).toISOString(),
+      sector: Number(this.newRecordData.sector)
+    };
+
+    // Add type-specific fields
+    if (this.currentKpiType === 'bcp') {
+      payload.type = this.newRecordData.type;
+      payload.bl = this.newRecordData.bLs; // Note: API uses 'bl' but display uses 'bLs'
+      payload.bcPs_Reviewed = Number(this.newRecordData.bcPs_Reviewed);
+      payload.total_BCPs = Number(this.newRecordData.total_BCPs);
+    } else if (this.currentKpiType === 'dnt') {
+      payload.drillType = this.newRecordData.drillType;
+      payload.drillConducted = Number(this.newRecordData.drillConducted);
+      payload.plannedDrills = Number(this.newRecordData.plannedDrills);
+      payload.correctiveActions = Number(this.newRecordData.correctiveActions);
+      payload.correctiveType = this.newRecordData.correctiveType;
+    } else if (this.currentKpiType === 'erc') {
+      payload.ext_Requirement_Type = this.newRecordData.ext_Requirement_Type;
+      payload.total_Requirement = Number(this.newRecordData.total_Requirement);
+      payload.ext_Requirements = Number(this.newRecordData.ext_Requirements);
+    }
+
+    // Validate required fields
+    if (!this.validateNewRecord(payload)) {
+      this.showNotification('Please fill in all required fields', 'error');
+      return;
+    }
+
+    // Make POST request
+    const apiUrl = `${this.baseUrl}${this.currentConfig.apiEndpoint}`;
+    
+    console.log('Creating new record:', payload);
+    
+    this.http.post<any>(apiUrl, payload, { withCredentials: true }).subscribe({
+      next: (response) => {
+        this.showNotification('Record created successfully', 'success');
+        this.isAddingNew = false;
+        this.newRecordData = {};
+        
+        // Refresh the table
+        this.fetchReports();
+      },
+      error: (err) => {
+        console.error('Error creating record:', err);
+        this.showNotification('Failed to create record', 'error');
+      }
+    });
+  }
+
+  private validateNewRecord(payload: any): boolean {
+    // Check required fields
+    if (!payload.date || payload.sector === '' || payload.sector === null || payload.sector === undefined) {
+      return false;
+    }
+
+    // Type-specific validation
+    if (this.currentKpiType === 'bcp') {
+      return !!(payload.type && payload.bl);
+    } else if (this.currentKpiType === 'dnt') {
+      return !!(payload.drillType && payload.correctiveType);
+    } else if (this.currentKpiType === 'erc') {
+      return !!(payload.ext_Requirement_Type);
+    }
+
+    return false;
   }
 
   isPast(dateTime?: string): boolean {

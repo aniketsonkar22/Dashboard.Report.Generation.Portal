@@ -89,6 +89,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { AuthServiceAD } from "./services/auth-ad.service";
+import { AddKpiDialogComponent } from "./sec/add-kpi-dialog/add-kpi-dialog.component";
 
 function initializeAppFactory(
   authService: AuthServiceAD
@@ -141,6 +142,7 @@ const matModules = [
     ReportCardComponent,
     DashboardComponent,
     KpiTableComponent,
+    AddKpiDialogComponent,
     NavbarSecComponent,
     CommentsPageComponent,
     LogsPageComponent,

@@ -1,0 +1,128 @@
+<!-- add-kpi-dialog.component.html -->
+<h2 mat-dialog-title>Add New {{ data.kpiLabel }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="kpiForm" class="kpi-form">
+    
+    <!-- Common Fields -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="datePicker" formControlName="date" required>
+      <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+      <mat-datepicker #datePicker></mat-datepicker>
+      <mat-error *ngIf="kpiForm.get('date')?.hasError('required')">
+        Date is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Sector</mat-label>
+      <mat-select formControlName="sector" required>
+        <mat-option value="0">Northern</mat-option>
+        <mat-option value="1">Eastern</mat-option>
+        <mat-option value="2">Central</mat-option>
+        <mat-option value="3">Western</mat-option>
+        <mat-option value="4">Southern</mat-option>
+      </mat-select>
+      <mat-error *ngIf="kpiForm.get('sector')?.hasError('required')">
+        Sector is required
+      </mat-error>
+    </mat-form-field>
+
+    <!-- BCP Fields -->
+    <ng-container *ngIf="data.kpiType === 'bcp'">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Type</mat-label>
+        <input matInput formControlName="type" required>
+        <mat-error *ngIf="kpiForm.get('type')?.hasError('required')">
+          Type is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>BLs</mat-label>
+        <input matInput formControlName="bLs" required>
+        <mat-error *ngIf="kpiForm.get('bLs')?.hasError('required')">
+          BLs is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>BCPs Reviewed</mat-label>
+        <input matInput type="number" formControlName="bcPs_Reviewed" min="0">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Total BCPs</mat-label>
+        <input matInput type="number" formControlName="total_BCPs" min="0">
+      </mat-form-field>
+    </ng-container>
+
+    <!-- DnT Fields -->
+    <ng-container *ngIf="data.kpiType === 'dnt'">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Drill Type</mat-label>
+        <input matInput formControlName="drillType" required>
+        <mat-error *ngIf="kpiForm.get('drillType')?.hasError('required')">
+          Drill Type is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Drills Conducted</mat-label>
+        <input matInput type="number" formControlName="drillConducted" min="0">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Planned Drills</mat-label>
+        <input matInput type="number" formControlName="plannedDrills" min="0">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Corrective Actions</mat-label>
+        <input matInput type="number" formControlName="correctiveActions" min="0">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Corrective Type</mat-label>
+        <input matInput formControlName="correctiveType" required>
+        <mat-error *ngIf="kpiForm.get('correctiveType')?.hasError('required')">
+          Corrective Type is required
+        </mat-error>
+      </mat-form-field>
+    </ng-container>
+
+    <!-- ERC Fields -->
+    <ng-container *ngIf="data.kpiType === 'erc'">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Requirement Type</mat-label>
+        <input matInput formControlName="ext_Requirement_Type" required>
+        <mat-error *ngIf="kpiForm.get('ext_Requirement_Type')?.hasError('required')">
+          Requirement Type is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Total Requirements</mat-label>
+        <input matInput type="number" formControlName="total_Requirement" min="0">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>External Requirements</mat-label>
+        <input matInput type="number" formControlName="ext_Requirements" min="0">
+      </mat-form-field>
+    </ng-container>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" type="button">
+    <mat-icon>cancel</mat-icon>
+    Cancel
+  </button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!kpiForm.valid" type="button">
+    <mat-icon>save</mat-icon>
+    Save
+  </button>
+</mat-dialog-actions>
